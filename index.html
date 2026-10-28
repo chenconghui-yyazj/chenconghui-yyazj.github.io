@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -396,8 +396,8 @@
   </button>
   <div class="music-panel" id="musicPanel">
     <label>音量</label>
-    <input type="range" id="musicVol" min="0" max="100" value="20" aria-label="音量调节">
-    <span class="music-vol-num" id="musicVolNum">20%</span>
+    <input type="range" id="musicVol" min="0" max="100" value="45" aria-label="音量调节">
+    <span class="music-vol-num" id="musicVolNum">45%</span>
     <button class="music-close-x" id="musicClose" title="收起音量面板" aria-label="收起音量面板">×</button>
   </div>
 </div>
@@ -1688,11 +1688,11 @@ window.__initEslDash=__initEslDash;
   modal.addEventListener('click',function(e){if(e.target===modal)close()});
 })();
 
-// ===== 背景音乐控件：默认音量20%，可滑块调节，可关闭收起 =====
+// ===== 背景音乐控件：默认音量45%，可滑块调节，可关闭收起 =====
 (function(){
   var audio=new Audio('assets/bgm.mp3');
   audio.loop=true;
-  audio.volume=0.2; // 默认音量 20%
+  audio.volume=0.45; // 默认音量 45%
   audio.preload='auto';
   var toggle=document.getElementById('musicToggle');
   var panel=document.getElementById('musicPanel');
@@ -1745,6 +1745,7 @@ window.__initEslDash=__initEslDash;
 <div class="lightbox" id="lightbox"><button class="lb-close" type="button" title="关闭">×</button><img id="lightboxImg" alt="" onerror="this.style.display='none'"><div class="cap" id="lightboxCap"></div></div>
 </body>
 </html>
+
 
 
 
