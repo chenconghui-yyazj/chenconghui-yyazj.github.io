@@ -201,14 +201,15 @@
   .contact-box p{color:var(--muted);font-size:13px}
   .contact-close{position:absolute;top:12px;right:14px;width:36px;height:36px;border-radius:10px;border:1px solid rgba(152,165,206,.3);background:transparent;color:var(--text);font-size:18px;cursor:pointer;line-height:1}
   .contact-close:hover{border-color:var(--nv);color:var(--nv)}
-  /* ===== 背景音乐控件（右下角，联系我按钮下方）===== */
+  /* ===== 背景音乐控件（右下角，联系我按钮下方；初始仅显示音符）===== */
   .music-widget{position:fixed;right:22px;bottom:36px;z-index:1210;display:flex;align-items:center;gap:10px}
   .music-main-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(152,165,206,.3);background:rgba(3,5,20,.72);backdrop-filter:blur(10px);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s;box-shadow:0 0 18px rgba(59,130,246,.22)}
   .music-main-btn:hover{border-color:var(--nv);transform:translateY(-2px)}
   .music-main-btn svg{width:20px;height:20px;fill:currentColor;pointer-events:none}
   .music-main-btn.playing{border-color:var(--nv);color:var(--nv);box-shadow:0 0 22px rgba(255,107,107,.4)}
-  .music-panel{display:none;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;border:1px solid rgba(152,165,206,.25);background:rgba(3,5,20,.82);backdrop-filter:blur(10px)}
-  .music-panel.open{display:flex}
+  .music-panel{display:none;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;border:1px solid rgba(152,165,206,.25);background:rgba(3,5,20,.86);backdrop-filter:blur(10px)}
+  .music-panel.open{display:flex;animation:musicPop .18s ease}
+  @keyframes musicPop{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
   .music-panel label{font-size:12px;color:var(--muted);white-space:nowrap}
   .music-panel input[type=range]{width:96px;accent-color:var(--nv);cursor:pointer}
   .music-vol-num{font-size:12px;color:var(--nc);min-width:38px;text-align:right;font-variant-numeric:tabular-nums}
@@ -388,16 +389,16 @@
   </div>
 </div>
 
-<!-- ===== 背景音乐控件（右下角，联系我按钮下方）===== -->
+<!-- ===== 背景音乐控件（右下角，联系我按钮下方；初始只显示音符，点击音符弹出音量面板）===== -->
 <div class="music-widget" id="musicWidget">
-  <button class="music-main-btn" id="musicToggle" title="播放/暂停背景音乐" aria-label="播放暂停背景音乐">
+  <button class="music-main-btn" id="musicToggle" title="播放/暂停背景音乐，点击展开音量调节" aria-label="音乐播放暂停与音量调节">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17.75V7h4V3h-6z"/></svg>
   </button>
-  <div class="music-panel open" id="musicPanel">
+  <div class="music-panel" id="musicPanel">
     <label>音量</label>
     <input type="range" id="musicVol" min="0" max="100" value="20" aria-label="音量调节">
     <span class="music-vol-num" id="musicVolNum">20%</span>
-    <button class="music-close-x" id="musicClose" title="关闭音乐控件" aria-label="关闭音乐控件">×</button>
+    <button class="music-close-x" id="musicClose" title="收起音量面板" aria-label="收起音量面板">×</button>
   </div>
 </div>
 
@@ -1704,10 +1705,29 @@ window.__initEslDash=__initEslDash;
     playing=state;
     toggle.classList.toggle('playing',playing);
   }
-  // 主按钮：播放 / 暂停切换（按钮点击本身即浏览器认可的用户手势，可直接播放）
-  toggle.addEventListener('click',function(){
-    if(playing){audio.pause();setPlaying(false);return}
+  function startPlay(){
     audio.play().then(function(){setPlaying(true)}).catch(function(){setPlaying(false)});
+  }
+  // 浏览器禁止“打开即出声”：页面加载后第一次用户手势（点击/触摸/按键/滚动）到来，立刻自动开始播放
+  var autoStarted=false;
+  function autoOnce(){
+    if(autoStarted)return;
+    autoStarted=true;
+    document.removeEventListener('click',autoOnce);
+    document.removeEventListener('touchstart',autoOnce);
+    document.removeEventListener('keydown',autoOnce);
+    document.removeEventListener('wheel',autoOnce);
+    startPlay();
+  }
+  document.addEventListener('click',autoOnce);
+  document.addEventListener('touchstart',autoOnce,{passive:true});
+  document.addEventListener('keydown',autoOnce);
+  document.addEventListener('wheel',autoOnce,{passive:true});
+
+  // 点音符：暂停/继续播放；同时展开音量面板
+  toggle.addEventListener('click',function(){
+    if(playing){audio.pause();setPlaying(false)} else {startPlay()}
+    panel.classList.toggle('open');
   });
   // 音量滑块：0~100 映射到 0~1 的 audio.volume
   vol.addEventListener('input',function(){
@@ -1715,11 +1735,10 @@ window.__initEslDash=__initEslDash;
     volNum.textContent=v+'%';
     audio.volume=v/100;
   });
-  // 关闭 X：暂停并隐藏整个控件
-  closeX.addEventListener('click',function(){
-    audio.pause();setPlaying(false);
+  // X：只收起音量面板，保留音符按钮，不停止音乐
+  closeX.addEventListener('click',function(e){
+    e.stopPropagation();
     panel.classList.remove('open');
-    document.getElementById('musicWidget').style.display='none';
   });
 })();
 </script>
