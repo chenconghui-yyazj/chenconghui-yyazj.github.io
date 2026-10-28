@@ -2,37 +2,1676 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>陈聪惠 · 数据分析作品集</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>陈聪惠 · 数据分析师作品集</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23030514'/%3E%3Ccircle cx='12' cy='12' r='5' fill='%23A855F7'/%3E%3C/svg%3E">
+<script src="https://fastly.jsdelivr.net/npm/three@0.160.0/build/three.min.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js';document.head.appendChild(s)"></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js';document.head.appendChild(s)"></script>
 <style>
-  :root{ --bg:#FFFFFF; --card:#EEF3F8; --primary:#A8C0D6; --accent:#5A7D9C; --text:#333333; --muted:#6B7A8D; }
+  :root{--bg:#03050F;--nc:#FFB84D;--nv:#FF6B6B;--nm:#3B82F6;--text:#FFF4E0;--muted:#A9B6D8;--grad:linear-gradient(92deg,#FFB84D,#FF6B6B 50%,#3B82F6)}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:"Microsoft YaHei",-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.9}
-  .container{max-width:880px;margin:0 auto;padding:70px 24px}
-  .hero{text-align:center;padding-bottom:36px}
-  .hero h1{font-size:32px;font-weight:600}
-  .hero p{color:var(--muted);margin-top:10px;font-size:15px}
-  .card{background:var(--card);border-radius:12px;padding:22px;margin-bottom:16px;display:block;text-decoration:none;color:var(--text);transition:.2s}
-  .card:hover{background:#E3EAF3}
-  .card h2{font-size:17px;color:var(--accent);margin-bottom:6px}
-  .card p{font-size:14px;color:var(--muted);margin-bottom:6px}
-  .card .link{font-size:13px;color:var(--accent)}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
+  #bg3d{position:fixed;inset:0;z-index:0;pointer-events:none}
+  #bg3d canvas{display:block;width:100%!important;height:100%!important}
+  #bgfallback{position:fixed;inset:0;z-index:0;pointer-events:none;display:none;background:radial-gradient(circle at 30% 30%,#1a1040,#030514 60%)}
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 30px}
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:999;background:var(--grad);box-shadow:0 0 14px rgba(255,79,216,.7)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 0;transition:.35s}
+  nav.on{background:rgba(3,5,20,.72);backdrop-filter:blur(16px);padding:12px 0;border-bottom:1px solid rgba(152,165,206,.15)}
+  nav .inner{max-width:1080px;margin:0 auto;padding:0 30px;display:flex;justify-content:space-between;align-items:center}
+  .brand{font-weight:800;font-size:18px;letter-spacing:1px}
+  .brand em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  nav .links{display:flex;gap:22px}
+  nav .links a{font-size:14px;color:var(--muted);transition:.25s;position:relative;display:flex;align-items:center;gap:4px}
+  nav .links a::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--grad);transition:.3s}
+  nav .links a:hover{color:#fff}nav .links a:hover::after{width:100%}
+  nav .links a.gitee-link{font-size:12px;letter-spacing:0;white-space:nowrap;flex-shrink:0;opacity:.88;cursor:pointer}
+  nav .links a.gitee-link::after{display:none}
+  nav .links a.gitee-link:hover{color:var(--nv);filter:drop-shadow(0 0 8px rgba(255,107,107,.6));opacity:1}
+  .hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:130px 0 70px}
+  .hero .prompt{font-family:Consolas,monospace;font-size:14px;color:var(--nc);margin-bottom:22px}
+  .hero .blink{width:9px;height:20px;background:var(--nc);display:inline-block;animation:blink 1s steps(1) infinite;margin-left:8px}
+  @keyframes blink{50%{opacity:0}}
+  .hero h1{font-size:56px;line-height:1.15;font-weight:900;letter-spacing:-1px;text-shadow:0 0 70px rgba(168,85,247,.3)}
+  .hero h1 .g{background:var(--grad);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+  @keyframes flow{to{background-position:200% center}}
+  .hero .sub{font-size:19px;color:var(--nc);margin-top:20px;min-height:30px}
+  .hero .bio{font-size:15px;color:var(--muted);max-width:660px;margin-top:22px}
+  .hero .btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;transition:.35s;border:1px solid transparent;display:inline-block}
+  .btn.primary{background:var(--grad);color:#0a0216;box-shadow:0 0 30px rgba(255,79,216,.45)}
+  .btn.primary:hover{transform:translateY(-3px);box-shadow:0 0 48px rgba(255,79,216,.6)}
+  .btn.ghost{border-color:rgba(152,165,206,.3);color:var(--text)}
+  .btn.ghost:hover{border-color:var(--nv);color:var(--nv)}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+  @media(max-width:640px){.stat-row{grid-template-columns:1fr}}
+  .stat{background:rgba(16,20,50,.6);border:1px solid rgba(152,165,206,.16);border-radius:18px;padding:22px;text-align:center;backdrop-filter:blur(8px);cursor:pointer;transition:.3s;position:relative}
+  .stat:hover{border-color:var(--nv);transform:translateY(-3px);box-shadow:0 0 26px rgba(255,107,107,.25)}
+  .stat .n{font-size:33px;font-weight:800;font-variant-numeric:tabular-nums;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:12px;color:var(--muted);margin-top:5px}
+  .stat .tip{position:absolute;bottom:8px;left:0;right:0;font-size:10px;color:rgba(169,182,216,.6);opacity:0;transition:.3s}
+  .stat:hover .tip{opacity:1}
+  section{padding:100px 0;position:relative}
+  .sec-head{margin-bottom:42px;position:relative}
+  .sec-tag{font-family:Consolas,monospace;font-size:13px;color:var(--nc);display:flex;align-items:center;gap:10px}
+  .sec-tag::before{content:"";width:28px;height:2px;background:var(--grad)}
+  .sec-title{font-size:35px;font-weight:900;margin-top:14px;letter-spacing:-.5px}
+  .sec-lead{color:var(--muted);font-size:15px;max-width:760px;margin-top:14px}
+  /* 关于我头像：紧贴「关于我」标题右侧，完整人像 + 小光点环绕 */
+  .about-title{display:flex;align-items:center;gap:16px}
+  .avatar-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;width:132px;height:156px;flex-shrink:0;align-self:center}
+  .avatar-ring::before{content:"";position:absolute;left:50%;top:50%;width:188px;height:188px;transform:translate(-50%,-50%);border-radius:50%;background:conic-gradient(from 0deg,#FFB84D 0deg,#FF6B6B 120deg,#3B82F6 240deg,#FFB84D 360deg);filter:blur(24px);opacity:.5;pointer-events:none;z-index:0;animation:haloSpin 9s linear infinite}
+  .about-avatar{position:relative;width:120px;height:144px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(255,184,77,.45)) drop-shadow(0 0 34px rgba(59,130,246,.28));animation:avatarFloat 4s ease-in-out infinite;pointer-events:none;z-index:1}
+  @keyframes avatarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes haloSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  @media(max-width:640px){.avatar-ring{width:84px;height:100px}.avatar-ring::before{width:124px;height:124px}.about-avatar{width:76px;height:92px}.about-title{gap:10px;align-items:center}}
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+  .proj{background:linear-gradient(165deg,rgba(16,20,50,.72),#0a0e2a);border:1px solid rgba(152,165,206,.16);border-radius:22px;padding:28px;transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;overflow:hidden;cursor:pointer}
+  .proj:hover{border-color:rgba(168,85,247,.5);box-shadow:0 30px 80px -25px rgba(168,85,247,.45);transform:translateY(-4px)}
+  .proj .no{font-family:Consolas,monospace;font-size:12px;color:var(--nc);letter-spacing:2px}
+  .proj h3{font-size:20px;font-weight:800;margin:12px 0}
+  .proj .desc{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+  .proj .tech{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+  .proj .tech span{font-size:11px;color:var(--nc);background:rgba(124,107,255,.1);border:1px solid rgba(124,107,255,.25);padding:3px 11px;border-radius:20px}
+  .proj .kpi{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
+  .proj .kpi span{background:rgba(5,8,30,.8);border:1px solid rgba(152,165,206,.16);border-radius:11px;padding:7px 12px;font-size:12px;color:var(--muted)}
+  .proj .kpi b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .proj .more{font-size:13px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700}
+  .proj .more::after{content:" →";transition:.3s}
+  .proj:hover .more::after{margin-left:5px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .step{background:rgba(16,20,50,.6);border:1px solid rgba(152,165,206,.16);border-radius:18px;padding:24px;transition:.3s}
+  .step:hover{border-color:var(--nv);transform:translateY(-4px)}
+  .step .n{font-size:31px;font-weight:900;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .step b{display:block;margin:8px 0 5px;font-size:15px}
+  .step p{font-size:13px;color:var(--muted)}
+  .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .skill{background:rgba(16,20,50,.6);border:1px solid rgba(152,165,206,.16);border-radius:18px;padding:22px;transition:.3s}
+  .skill:hover{border-color:var(--nc);transform:translateY(-3px)}
+  .skill b{font-size:15px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .skill .what{font-size:13px;color:var(--muted);margin-top:8px;border-left:2px solid rgba(124,107,255,.4);padding-left:10px}
+  .skill .what span{display:block;color:var(--nc);font-size:11px;letter-spacing:1px;margin-bottom:2px}
+  .exp{display:grid;grid-template-columns:1fr;gap:16px}
+  .exp-card{background:linear-gradient(165deg,rgba(16,20,50,.72),#0a0e2a);border:1px solid rgba(152,165,206,.16);border-radius:22px;padding:28px;transition:.3s}
+  .exp-card:hover{border-color:var(--nm);box-shadow:0 20px 60px -30px rgba(59,130,246,.4)}
+  .exp-card .head{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:baseline;gap:8px}
+  .exp-card h3{font-size:19px;font-weight:800}
+  .exp-card .role{color:var(--nv);font-size:13px;font-weight:700}
+  .exp-card .date{font-family:Consolas,monospace;font-size:12px;color:var(--muted)}
+  .exp-card .achievements{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .exp-card .achievements span{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:11px;padding:6px 12px;font-size:12px;color:var(--muted)}
+  .exp-card .achievements b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  footer{border-top:1px solid rgba(152,165,206,.16);padding:46px 0;position:relative;z-index:2}
+  footer .inner{max-width:1080px;margin:0 auto;padding:0 30px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;color:var(--muted);font-size:14px}
+  footer a{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+  .rv{opacity:0;transform:translateY(34px);transition:.9s cubic-bezier(.22,1,.36,1)}
+  .rv.in{opacity:1;transform:none}
+  /* ===== 弹窗（奖状详情）===== */
+  .modal{position:fixed;inset:0;z-index:500;background:rgba(2,3,12,.86);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal-box{background:linear-gradient(165deg,#0c1128,#07091a);border:1px solid rgba(152,165,206,.2);border-radius:24px;max-width:820px;width:100%;max-height:86vh;display:flex;flex-direction:column;overflow:hidden}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgba(152,165,206,.15)}
+  .modal-head h3{font-size:20px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .modal-close{width:40px;height:40px;border-radius:12px;border:1px solid rgba(152,165,206,.3);background:transparent;color:var(--text);font-size:20px;cursor:pointer;line-height:1}
+  .modal-close:hover{border-color:var(--nv);color:var(--nv)}
+  .modal-body{overflow-y:auto;padding:12px 24px 24px;scroll-behavior:smooth}
+  .modal-body::-webkit-scrollbar{width:8px}
+  .modal-body::-webkit-scrollbar-thumb{background:rgba(152,165,206,.3);border-radius:8px}
+  .award-item{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px dashed rgba(152,165,206,.14)}
+  .award-item:last-child{border-bottom:none}
+  .award-item .badge{flex-shrink:0;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;background:linear-gradient(135deg,rgba(255,184,77,.2),rgba(59,130,246,.2));border:1px solid rgba(255,184,77,.35);font-size:13px}
+  .award-item .info{flex:1}
+  .award-item .info b{font-size:14px}
+  .award-item .info span{display:block;font-size:12px;color:var(--muted)}
+  .award-item img{flex-shrink:0;width:88px;height:62px;object-fit:cover;border-radius:8px;border:1px solid rgba(152,165,206,.2);cursor:pointer}
+  .award-item img:hover{border-color:var(--nc)}
+  .auto-scroll{animation:autoscroll 18s linear infinite}
+  .modal-box.autoscroll .modal-body{animation:autoscroll 18s linear infinite}
+  @keyframes autoscroll{0%{transform:translateY(0)}100%{transform:translateY(-55%)}}
+  /* ===== 详情页（作品）===== */
+  .detail{position:fixed;inset:0;z-index:600;background:var(--bg);overflow-y:auto;display:none}
+  .detail.open{display:block}
+  .detail .dwrap{max-width:920px;margin:0 auto;padding:80px 30px 80px}
+  .detail-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;padding:10px 18px;border-radius:12px;border:1px solid rgba(152,165,206,.3);color:var(--muted);font-size:13px;cursor:pointer;transition:.3s}
+  .detail-back:hover{border-color:var(--nv);color:var(--nv)}
+  .detail h1{font-size:30px;font-weight:900;letter-spacing:-.5px;margin-bottom:8px}
+  .detail .dmeta{font-family:Consolas,monospace;font-size:13px;color:var(--nc);margin-bottom:20px}
+  .detail .dlead{color:var(--muted);font-size:14.5px;margin-bottom:30px}
+  .detail h2{font-size:20px;font-weight:800;margin:34px 0 14px;display:flex;align-items:center;gap:10px}
+  .detail h2::before{content:"";width:22px;height:2px;background:var(--grad)}
+  .detail p{color:var(--muted);font-size:14px;margin-bottom:10px}
+  .detail p b{color:var(--text)}
+  .detail .fig{margin:18px 0;text-align:center}
+  .detail .fig img{max-width:82%;border-radius:14px;border:1px solid rgba(152,165,206,.18);background:#0a0e2a;margin:0 auto}
+  .detail .fig .cap{font-size:12px;color:var(--muted);margin-top:8px}
+  .detail > .cap, .detail .secbox > .cap{display:block;font-size:12px;color:var(--muted);margin:6px 0 14px;text-align:center}
+  .detail ul{margin:8px 0 14px 22px;color:var(--muted);font-size:14px}
+  .detail ul li{margin:6px 0}
+  .detail pre code{background:transparent;color:inherit}
+  .detail .fig2{display:block;margin:18px 0}
+  .detail .fig2 img{width:82%;border-radius:12px;border:1px solid rgba(152,165,206,.18);background:#0a0e2a;margin:0 auto 14px}
+  .detail-close{position:fixed;top:20px;right:24px;z-index:700;width:44px;height:44px;border-radius:12px;border:1px solid rgba(152,165,206,.3);background:rgba(3,5,20,.7);backdrop-filter:blur(10px);color:var(--text);font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1}
+  .detail.open .detail-close{display:flex}
+  .detail-close:hover{border-color:var(--nv);color:var(--nv)}
+  .detail-back-bottom{margin:50px auto 0;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;background:var(--grad);color:#0a0216;font-weight:700;font-size:14px;cursor:pointer;border:none;box-shadow:0 0 30px rgba(255,79,216,.4)}
+  .detail-back-bottom:hover{transform:translateY(-2px)}
+  /* ECharts 看板 */
+  .dash-panel{background:rgba(16,20,50,.6);border:1px solid rgba(152,165,206,.16);border-radius:18px;padding:18px;margin:18px 0}
+  .dash-kpi{font-size:13px;color:var(--nc);margin-bottom:12px;padding:10px 14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:10px;font-family:Consolas,monospace}
+  .dash-kpi b{color:#fff}
+  .dash-controls{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px;align-items:flex-start}
+  .dash-chip-group{flex:1;min-width:200px}
+  .dash-chip-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-family:Consolas,monospace;letter-spacing:1px}
+  .dash-chip-list{display:flex;flex-wrap:wrap;gap:6px}
+  .dash-chip{display:inline-flex;align-items:center;min-height:36px;padding:6px 12px;border-radius:18px;border:1px solid rgba(152,165,206,.25);background:rgba(5,8,30,.6);color:var(--muted);font-size:12px;cursor:pointer;transition:.2s;user-select:none}
+  .dash-chip:hover{border-color:var(--nv);color:#fff}
+  .dash-chip.on{background:var(--grad);color:#0a0216;font-weight:700;border-color:transparent;box-shadow:0 0 12px rgba(255,79,216,.35)}
+  .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .dash-grid .echart{height:260px;width:100%}
+  .dash-grid .full{grid-column:1/-1;height:280px}
+  @media(max-width:640px){.dash-grid{grid-template-columns:1fr}.detail .fig img,.detail .fig2 img{max-width:100%!important;width:100%!important}}
+  .detail .code{background:#070912;border:1px solid rgba(152,165,206,.18);border-radius:14px;padding:18px;margin:14px 0;overflow-x:auto}
+  .detail .code pre{font-family:Consolas,"SF Mono",monospace;font-size:12.5px;line-height:1.7;color:#D6E0FF}
+  .detail .code .cm{color:#6B7A99}
+  .detail table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px}
+  .detail th,.detail td{border:1px solid rgba(152,165,206,.22);padding:9px 12px;text-align:left}
+  .detail th{background:rgba(59,130,246,.1);color:var(--nc);font-weight:700}
+  .detail td{color:var(--muted)}
+  .detail .kbox{background:linear-gradient(165deg,rgba(16,20,50,.7),#0a0e2a);border:1px solid rgba(152,165,206,.16);border-radius:18px;padding:20px;margin:14px 0}
+  .detail .kbox b{color:var(--nv)}
+  @media(max-width:640px){.hero h1{font-size:34px}nav .links{display:none}.sec-title{font-size:27px}.detail .fig2{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.auto-scroll{animation:none}}
+  /* ===== 自定义光标 ===== */
+  .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:2100;border-radius:50%;transform:translate(-50%,-50%)}
+  .cursor-dot{width:8px;height:8px;background:var(--nc);box-shadow:0 0 14px var(--nc)}
+  .cursor-ring{width:38px;height:38px;border:1.5px solid rgba(255,184,77,.5);transition:transform .18s,opacity .18s,width .18s,height .18s}
+  .cursor-ring.hover{width:54px;height:54px;border-color:var(--nv);box-shadow:0 0 22px rgba(255,107,107,.35)}
+  @media(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
+  /* ===== 联系我（微信）===== */
+  .contact-btn{position:fixed;right:22px;bottom:88px;z-index:1200;height:44px;padding:0 18px;border-radius:22px;border:1px solid rgba(152,165,206,.3);background:rgba(3,5,20,.7);backdrop-filter:blur(10px);color:var(--text);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;transition:.3s;box-shadow:0 0 24px rgba(59,130,246,.25)}
+  .contact-btn:hover{border-color:var(--nv);transform:translateY(-2px);box-shadow:0 0 28px rgba(255,107,107,.4)}
+  .contact-modal{position:fixed;inset:0;z-index:1300;background:rgba(2,3,12,.86);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
+  .contact-modal.open{display:flex}
+  .contact-box{background:linear-gradient(165deg,#0c1128,#07091a);border:1px solid rgba(152,165,206,.2);border-radius:24px;padding:30px 28px;text-align:center;max-width:340px;width:100%;position:relative}
+  .contact-box h3{font-size:18px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:16px}
+  .contact-box img{width:220px;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(152,165,206,.2);margin:0 auto 14px;display:block}
+  .contact-box p{color:var(--muted);font-size:13px}
+  .contact-close{position:absolute;top:12px;right:14px;width:36px;height:36px;border-radius:10px;border:1px solid rgba(152,165,206,.3);background:transparent;color:var(--text);font-size:18px;cursor:pointer;line-height:1}
+  .contact-close:hover{border-color:var(--nv);color:var(--nv)}
+  /* ===== 作品详情：Word式导览 ===== */
+  .detail-layout{display:block;max-width:920px;margin:0 auto;padding:34px 30px 100px;position:relative;z-index:2}
+  .detail-body{min-width:0}
+  .secbox{scroll-margin-top:88px}
+  .secbox h2{margin-top:0}
+  /* 竖向导览：移动端先横向条，桌面端左侧 sticky */
+  .detail-side{display:flex;flex-direction:row;gap:8px;overflow-x:auto;position:sticky;top:64px;background:rgba(3,5,20,.85);backdrop-filter:blur(10px);padding:10px 14px;border-radius:12px;margin-bottom:18px;z-index:5}
+  .detail-side a{flex:0 0 auto;white-space:nowrap;padding:6px 12px;border:1px solid rgba(152,165,206,.25);border-radius:16px;font-size:11px;color:var(--muted);transition:.2s}
+  .detail-side a:hover{color:#fff;border-color:var(--nv)}
+  .detail-side a.on{color:var(--nv);border-color:var(--nv);background:rgba(255,107,107,.1)}
+  @media(min-width:900px){
+    .detail-layout{display:flex;gap:36px;max-width:1180px;padding:34px 40px 100px}
+    .detail-side{display:block;flex:0 0 190px;position:sticky;top:80px;align-self:flex-start;max-height:calc(100vh - 110px);overflow-y:auto;padding:18px 6px 18px 14px;border-left:1px solid rgba(152,165,206,.18);background:none;backdrop-filter:none;border-radius:0;margin-bottom:0}
+    .detail-side::-webkit-scrollbar{width:5px}
+    .detail-side::-webkit-scrollbar-thumb{background:rgba(152,165,206,.3);border-radius:5px}
+    .detail-body{flex:1;min-width:0}
+    .detail-side a{display:block;white-space:normal;padding:7px 10px;border:1px solid transparent;border-left:2px solid transparent;border-radius:8px;line-height:1.4}
+    .detail-side a:hover{background:rgba(124,107,255,.08);border-color:transparent;border-left-color:var(--nv)}
+    .detail-side a.on{color:var(--nc);border-left-color:var(--nv);background:rgba(255,184,77,.08)}
+  }
+  /* ===== 奖状放大（网格 + lightbox）===== */
+  .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:16px;padding:16px 0}
+  .photo-card{background:rgba(16,20,50,.5);border:1px solid rgba(152,165,206,.16);border-radius:14px;padding:12px;text-align:center;cursor:zoom-in;transition:.3s;overflow:hidden}
+  .photo-card:hover{border-color:var(--nv);transform:translateY(-3px);box-shadow:0 0 22px rgba(255,107,107,.2)}
+  .photo-card .frame{width:100%;aspect-ratio:1/1;background:#0a0e2a;border:1px solid rgba(152,165,206,.2);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+  .photo-card img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;pointer-events:none;transition:transform .3s}
+  .photo-card img.rot-img{transform:rotate(-90deg);max-width:100%;max-height:100%}
+  .photo-card .t{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.45}
+  .photo-card .t-e{color:var(--muted);font-size:11px;margin-bottom:3px}
+  .photo-card .t-n{color:var(--text);font-weight:600;font-size:13px}
+  .photo-card .t b{color:var(--text)}
+  .photo-card .noimg{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(152,165,206,.3);border-radius:8px;color:#5c6b8f;font-size:12px;background:rgba(5,8,30,.6)}
+  .lightbox{position:fixed;inset:0;z-index:900;background:rgba(2,3,12,.95);display:none;align-items:center;justify-content:center;padding:30px;cursor:zoom-out}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:94%;max-height:88vh;border-radius:8px;box-shadow:0 20px 80px rgba(0,0,0,.6);background:#000;transition:transform .3s}
+  .lightbox img.rot-img{transform:rotate(-90deg);max-height:94vw;max-width:88vh}
+  .lightbox .cap{position:fixed;bottom:26px;left:0;right:0;text-align:center;color:var(--muted);font-size:13px}
+  .lightbox .lb-close{position:fixed;top:20px;right:24px;width:44px;height:44px;border-radius:12px;border:1px solid rgba(152,165,206,.3);background:rgba(3,5,20,.7);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:901;line-height:1}
+  .lightbox .lb-close:hover{border-color:var(--nv);color:var(--nv)}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="hero">
-    <h1>陈聪惠</h1>
-    <p>数据分析 · 数据可视化 · 求职作品集</p>
+<div id="bg3d"></div><div id="bgfallback"></div>
+<div class="cursor-dot"></div><div class="cursor-ring"></div>
+<div id="progress"></div>
+<nav id="nav"><div class="inner">
+  <div class="brand">CHEN <em>CONGHUI</em></div>
+  <div class="links"><a href="#awards">奖项</a><a href="#work">作品</a><a href="#experience">实践经历</a><a href="#method">方法</a><a href="#skills">技能</a><a href="#about">关于我</a><a class="gitee-link" id="giteeLink" href="https://gitee.com/chenconghui13671482642" target="_blank" rel="noopener">Gitee 个人主页：https://gitee.com/chenconghui13671482642</a></div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <h1>让零散的数据形成闭环<br>让隐藏的<span class="g">价值清晰可见</span></h1>
+  <div class="sub" id="type"></div>
+  <div class="bio">我是陈聪惠，我致力于成为一名扎根业务、理性审慎的数据分析师。不止熟练驾驭指标、SQL 与可视化工具，更愿意沉下心读懂数字背后的真实逻辑；不盲从数据表象，不输出脱离实际的空洞结论，坚持严谨校验、客观求证，把零散信息提炼成清晰洞见，用可落地的分析支撑科学决策，让数据真正成为发现问题、规避风险、创造价值的可靠力量。</div>
+  <div class="btns"><a class="btn primary" href="#work">探索作品 ↓</a><a class="btn primary" href="#experience">实践经历 ↓</a></div>
+  <div class="stat-row" id="awards">
+    <div class="stat" data-level="国家级"><div class="n" data-t="7">0</div><div class="l">国家级奖项</div><div class="tip">点击查看具体内容</div></div>
+    <div class="stat" data-level="省级"><div class="n" data-t="7">0</div><div class="l">省级奖项</div><div class="tip">点击查看具体内容</div></div>
+    <div class="stat" data-level="校级"><div class="n" data-t="16">0</div><div class="l">校级奖项</div><div class="tip">点击查看具体内容</div></div>
+    <div class="stat" data-level="院级"><div class="n" data-t="6">0</div><div class="l">院级奖项</div><div class="tip">点击查看具体内容</div></div>
+    <div class="stat" data-level="版权登记"><div class="n" data-t="2">0</div><div class="l">版权登记</div><div class="tip">点击查看具体内容</div></div>
+    <div class="stat" data-level="证书"><div class="n" data-t="8">0</div><div class="l">证书</div><div class="tip">点击查看具体内容</div></div>
+  </div>
+</div></header>
+
+<section id="work"><div class="wrap">
+  <div class="sec-head rv"><div class="sec-tag">// selected_work</div><div class="sec-title">作品：用数据解决问题</div><div class="sec-lead">每个项目完整呈现：问题 → 方法 → 可衡量的结果。点击「查看完整项目」进入图文详情。</div></div>
+  <div class="proj-grid rv">
+    <div class="proj" data-proj="recruit"><div class="no">PROJECT / 01</div><h3>上市公司招聘大数据：人才需求与就业趋势</h3>
+      <div class="desc">清洗并挖掘 32 万条上市公司招聘记录，从行业、城市、学历、岗位、薪资、时间六维刻画人才需求，研判就业趋势，输出双语报告与交互看板。</div>
+      <div class="tech"><span>Python</span><span>SPSS</span><span>Streamlit</span><span>Matplotlib</span></div>
+      <div class="kpi"><span>样本 <b>323,818</b></span><span>行业 <b>85</b></span><span>城市 <b>884</b></span><span>图表 <b>12</b></span></div>
+      <span class="more">查看完整项目</span></div>
+    <div class="proj" data-proj="light"><div class="no">PROJECT / 02</div><h3>广东省轻食市场调查：消费选择与供给适配</h3>
+      <div class="desc">自主设计 36 题问卷真实投放，结合信效度、聚类、结构方程、Logistic 回归与文本挖掘，刻画三类客群、诊断市场痛点，输出可落地策略。</div>
+      <div class="tech"><span>SPSS</span><span>Python</span><span>SEM</span><span>Logistic</span><span>jieba</span></div>
+      <div class="kpi"><span>有效 <b>587</b></span><span>图 <b>18</b></span><span>模型 <b>SEM+Logit</b></span><span>三类客群</span></div>
+      <span class="more">查看完整项目</span></div>
+    <div class="proj" data-proj="esl">
+  <div class="no">PROJECT / 03</div>
+  <h3>维界投影 · ESL 电子价签中台：行业数据分析</h3>
+  <p class="desc">用 104 个真实来源、多机构并存口径反推中台开发方向：从全球/中国市场规模、出货量 CAGR、竞品市占到政策与 ROI，系统论证「行业缺的是中立软件大脑」。</p>
+  <div class="tech">
+    <span>Python</span><span>数据治理</span><span>多源核验</span><span>市场规模测算</span><span>CAGR / 市占</span><span>可视化</span>
+  </div>
+  <div class="kpi">
+    <span><b>2.21</b> 2025 全球市场均值（十亿美元，6 机构口径）</span>
+    <span><b>~31.5%</b> 2021→2025 出货量量级 CAGR</span>
+    <span><b>104</b> 可追溯来源 URL，无编造数字</span>
+  </div>
+  <span class="more">查看完整项目</span>
+</div>
+  </div>
+</div></section>
+
+<section id="experience"><div class="wrap">
+  <div class="sec-head rv"><div class="sec-tag">// experience</div><div class="sec-title">实践经历</div><div class="sec-lead">把课堂的数据能力，用到真实的商业场景里。三端经历：直播运营 × 校园宣传。</div></div>
+  <div class="exp rv">
+    <div class="exp-card">
+      <div class="head"><h3>深圳马克图布文化创意 · 直播运营</h3><span class="role">直播运营</span><span class="date">2024.10 — 2025.02</span></div>
+      <div class="achievements"><span>直播 <b>20+</b> 场</span><span>半学期涨粉 <b>320+</b></span><span>短视频播放 <b>破万</b></span><span>点击率提升 <b>21%</b></span><span>停留时长提升 <b>16%</b></span><span>完成账号 <b>冷启动</b></span></div>
+    </div>
+    <div class="exp-card">
+      <div class="head"><h3>内容星球（深圳）数字科技 · 直播运营</h3><span class="role">数据分析 × 直播运营</span><span class="date">2025.03 — 2025.09</span></div>
+      <div class="achievements"><span>硬盘类数码产品 <b>数据统计与转化复盘</b></span><span>咨询下单转化率提升 <b>14%</b></span><span>商品页访客咨询率提升 <b>18%</b></span><span>获评 <b>优秀学员</b></span></div>
+    </div>
+    <div class="exp-card">
+      <div class="head"><h3>广州商学院 · 校园宣传大使</h3><span class="role">直播宣讲 × 招生对接 × 内容创作</span><span class="date">2024 — 至今（两年）</span></div>
+      <div class="achievements"><span>直播宣讲招生 <b>10+</b> 场</span><span>对接寒假 <b>湛江市第四中学</b> 招生任务</span><span>每月校园 vlog，浏览量累计 <b>过千</b></span></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="method"><div class="wrap">
+  <div class="sec-head rv"><div class="sec-tag">// methodology</div><div class="sec-title">我怎么做数据分析</div><div class="sec-lead">一套可复现、可验证、可交付的全流程。先问要做什么决策，再让数据一步步给出答案。</div></div>
+  <div class="steps rv">
+    <div class="step"><div class="n">01</div><b>理解决策</b><p>这次分析支撑什么决定？先问业务问题，定义清楚目标</p></div>
+    <div class="step"><div class="n">02</div><b>盘查数据源</b><p>摸清每个来源，哪里脏、缺什么、口径如何，建立数据字典</p></div>
+    <div class="step"><div class="n">03</div><b>构建可复现管道</b><p>自动化、有验证、可版本化的清洗与分析流程</p></div>
+    <div class="step"><div class="n">04</div><b>数据清洗治理</b><p>ETL 标准化、异常值剔除（IQR）、缺失处理，构建可信数据集</p></div>
+    <div class="step"><div class="n">05</div><b>探索性分析</b><p>分布、相关性、画像，先看清数据全貌再建模</p></div>
+    <div class="step"><div class="n">06</div><b>建模与验证</b><p>聚类、回归、结构方程，交叉验证与显著性检验支撑结论</p></div>
+    <div class="step"><div class="n">07</div><b>可视化表达</b><p>用图表讲清故事，中英双语、规范配色，让结论一眼看懂</p></div>
+    <div class="step"><div class="n">08</div><b>交付与迭代</b><p>输出可执行建议与看板，随反馈持续迭代</p></div>
+  </div>
+</div></section>
+
+<section id="skills"><div class="wrap">
+  <div class="sec-head rv"><div class="sec-tag">// skills</div><div class="sec-title">技能栈</div><div class="sec-lead">熟练掌握并能独立应用于实际项目的数据分析技能栈，覆盖数据清洗、统计建模、数据可视化与 AI 智能体应用全流程。</div></div>
+  <div class="skills rv">
+    <div class="skill"><b>Python</b><div class="what">pandas 数据清洗合并 · numpy 计算 · jieba 分词 · matplotlib / seaborn 绘图 · 全流程可复现</div></div>
+    <div class="skill"><b>SQL</b><div class="what">增删改查 · 多表关联 · 窗口函数 · 聚合分组统计</div></div>
+    <div class="skill"><b>SPSS</b><div class="what">描述统计 · T 检验 / ANOVA · K-Means / 二阶聚类 · 因子分析 · Logistic 回归 · 时间序列 ARIMA · 判别分析</div></div>
+    <div class="skill"><b>Excel</b><div class="what">数据透视表 · 常用函数（VLOOKUP 等）· 规划求解 · 条件格式 · 图表美化</div></div>
+    <div class="skill"><b>PowerBI</b><div class="what">数据建模 · DAX 度量 · 交互式看板</div></div>
+    <div class="skill"><b>数据可视化</b><div class="what">matplotlib / seaborn / ECharts · 中英双语图表 · 规范配色与信息层级</div></div>
+    <div class="skill"><b>统计建模</b><div class="what">线性 / Logistic 回归 · 聚类 · 因子分析 · SEM 结构方程 · 信效度检验</div></div>
+    <div class="skill"><b>AI 智能体应用</b><div class="what">熟练运用国内外 AI 辅助数据分析 · 大模型 API 接入 · 提示词编写</div></div>
+  </div>
+</div></section>
+
+<section id="about"><div class="wrap">
+  <div class="sec-head rv"><div class="sec-tag">// about</div><div class="sec-title about-title"><span class="avatar-ring"><img class="about-avatar" src="assets/Akp9bymtOodYRdx0JlocDKJbnvb.png" alt="陈聪惠"></span>关于我</div><div class="sec-lead">数据分析方向学习者。数据能力 + 商业洞察 + 持续迭代。</div></div>
+  <div class="skills rv">
+    <div class="skill"><b>教育</b><div class="what"><span>学校 · 专业</span>广州商学院 · 大数据管理与应用（大三在读）</div></div>
+    <div class="skill"><b>学业表现</b><div class="what"><span>绩点</span>GPA 3.75 / 4.5 · 专业前 5% · 连续两年校奖学金</div></div>
+    <div class="skill"><b>主修课程</b><div class="what"><span>课程</span>数据库原理 · Python 数据分析 · 统计学 · 数据可视化 · 大数据分析与应用 · Excel 高级应用 · SPSS 统计分析 · 市场营销 · 运筹学 · 经济数学（97分）</div></div>
+    <div class="skill"><b>现居</b><div class="what"><span>城市</span>广州</div></div>
+    <div class="skill"><b>联系方式</b><div class="what"><span>电话</span>136 7148 2642（微信同号）</div></div>
+    <div class="skill"><b>邮箱</b><div class="what"><span>Email</span>3211842099@qq.com</div></div>
+  </div>
+</div></section>
+
+<footer><div class="inner"><div>陈聪惠 · Chen Conghui</div><div>数据为先，事实为据</div></div></footer>
+
+<!-- ===== 奖状弹窗 ===== -->
+<div class="modal" id="modal">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-head"><h3 id="modalTitle"></h3><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ===== 联系我（微信扫码弹窗）===== -->
+<button class="contact-btn" id="contactBtn" title="联系我">联系我</button>
+<div class="contact-modal" id="contactModal">
+  <div class="contact-box">
+    <button class="contact-close" id="contactClose" title="关闭">×</button>
+    <h3>扫码加微信</h3>
+    <img src="assets/VWlPbM76TowYzqxFDyscddL8nUd.jpg" alt="微信二维码">
+    <p style="margin-top:6px;font-size:13px;color:var(--nc)">电话同号：13671482642</p>
+  </div>
+</div>
+
+<!-- ===== 作品详情页 ===== -->
+<div class="detail" id="detail">
+  <button class="detail-close" onclick="closeDetail()" title="关闭">×</button>
+  <div class="detail-layout">
+    <aside class="detail-side" id="detailSide"></aside>
+    <div class="detail-body">
+    <!-- 招聘分析详情 -->
+<div data-proj="recruit">
+  <h1>上市公司招聘大数据：人才需求多维画像与就业趋势分析</h1>
+  <div class="dmeta">Python 3 · pandas · numpy · matplotlib · seaborn · Streamlit ｜ 清洗后有效样本 323,818 条 · 覆盖 85 个国民经济行业 · 884 个工作城市 · 时间跨度 2015—2026 年 · 平均月薪 9,104 元</div>
+
+  <!-- ============ 01 研究背景与目标 ============ -->
+  <div class="secbox">
+    <h2>01 研究背景与目标</h2>
+    <p class="dlead">招聘数据是劳动力市场最敏感的"先行指标"。上市公司的岗位发布不仅反映企业自身的扩张节奏，更折射出行业景气度、区域产业结构与人才需求结构的系统性变迁。本项目以 2014—2026 年上市公司招聘大数据为底本，围绕"行业—城市—学历—岗位—薪资"五个维度，构建一套可复现、可交互的就业趋势分析框架。</p>
+    <p>在高校扩招、产业升级与就业压力并存的背景下，这份数据资产具备三重价值：其一，<strong>对高校</strong>，可作为专业设置、培养方案与就业指导的客观参照；其二，<strong>对学生</strong>，可量化不同行业、城市、学历门槛的回报差异，辅助职业选择；其三，<strong>对企业与政府</strong>，可识别区域人才虹吸与产业集聚方向，为校招策略与人才政策提供数据支撑。</p>
+    <p>项目目标是交付一条完整的数据工程链路：分块读取大表 → 字段标准化与薪资口径统一 → 异常值剔除与学历归并 → 多维统计与可视化 → Streamlit 交互看板，最终沉淀为可直接复现的 323,818 条干净招聘记录与 6 张核心分析图。</p>
   </div>
 
-  <a class="card" href="https://chenconghui-yyazj.github.io/recruitment-data-analysis/">
-    <h2>上市公司招聘数据分析</h2>
-    <p>基于招聘大数据的人才需求变化分析与就业趋势研判</p>
-    <span class="link">查看项目 →</span>
-  </a>
+  <!-- ============ 02 数据来源与治理 ============ -->
+  <div class="secbox">
+    <h2>02 数据来源与治理</h2>
+    <p class="dlead">原始数据为 2014—2026 年上市公司招聘明细 CSV，单表体量超百万行。为在普通内存环境下完成可复现分析，采用"分块读取 + 5% 等比例随机抽样"策略，再通过薪资口径转换、IQR 异常值剔除、学历五级归并等步骤完成清洗。</p>
 
-  <!-- 以后加项目：复制上面这段卡片，改标题、简介、链接 -->
+    <p><strong>（1）分块读取与 5% 抽样</strong>：以 10 万行一块读入，每块内固定随机种子 42 抽取 5%，保证样本可复现、不依赖全量原始数据。</p>
+    <div class="code"><pre>chunk_size = 100000
+sample_frac = 0.05  # 5% 等比例抽样，random_state=42 保证可复现
+chunks, total_rows = [], 0
+
+for chunk in pd.read_csv('上市公司招聘大数据2014-2026.3.csv',
+                         encoding='utf-8', low_memory=False,
+                         chunksize=chunk_size):
+    sampled = chunk.sample(frac=sample_frac, random_state=42)  # 每块独立抽样
+    chunks.append(sampled)
+    total_rows += len(chunk)
+
+df = pd.concat(chunks, ignore_index=True)</pre></div>
+
+    <p><strong>（2）薪资口径转换与 IQR 异常值剔除</strong>：将"最低月薪/最高月薪"两列统一为数值（去除千分位逗号、"k" 缩写、"元"字），并以最高月薪为对象做 IQR  fences 剔除录入异常，最终以 (最低+最高)/2 作为每条岗位的平均月薪。</p>
+    <div class="code"><pre># 区间薪资取中点作为该岗位代表月薪
+df_clean['平均月薪'] = (df_clean['最低月薪_数值'] + df_clean['最高月薪_数值']) / 2
+
+# 以最高月薪为基准，用 IQR  fences 剔除异常录入
+Q1 = df_clean['最高月薪_数值'].quantile(0.25)
+Q3 = df_clean['最高月薪_数值'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+df_clean = df_clean[(df_clean['最高月薪_数值'] >= lower_bound) &
+                    (df_clean['最高月薪_数值'] <= upper_bound)]</pre></div>
+
+    <p><strong>（3）学历五级归并</strong>：原始学历字段写法松散（"本科及以上""大专学历""不限"等），统一映射为博士、硕士、本科、大专、不限五类，便于横向统计。</p>
+    <div class="code"><pre>def simplify_edu(edu):
+    if pd.isna(edu):
+        return 'Unknown'
+    s = str(edu)
+    if '博士' in s:   return '博士'
+    if '硕士' in s:   return '硕士'
+    if '本科' in s:   return '本科'
+    if '大专' in s:   return '大专'
+    if '不限' in s or '无' in s: return '不限'
+    return '其他'
+
+df_clean['学历_简化'] = df_clean['学历要求'].apply(simplify_edu)</pre></div>
+
+    <p>清洗后保留 <strong>323,818</strong> 条有效记录，覆盖 <strong>85</strong> 个行业、<strong>884</strong> 个城市，平均月薪 <strong>9,104 元</strong>，中位数 8,000 元；本科与大专合计占比 <strong>77.3%</strong>（本科 44.9%、大专 32.4%），硕士及以上合计仅 2.3%。</p>
+  </div>
+
+  <!-- ============ 03 多维画像 ============ -->
+  <div class="secbox">
+    <h2>03 多维画像：六张图看清就业大盘</h2>
+    <p class="dlead">从行业、城市、学历、岗位、薪资五个维度切入，回答三个问题：岗位在哪些地方被创造出来？什么样的人被需要？钱在哪里？</p>
+
+    <div class="fig"><img src="assets/FPZIbi98LoDl6CxOZUSc0nOHnUd.png" alt="行业招聘量 Top10"></div>
+    <div class="cap">图 1 · 招聘量 Top10 行业：软件和信息技术服务业（44,352 条）与计算机通信电子设备制造业（41,331 条）合计占据近 1/4 份额，电气机械、医药、专用设备紧随其后。</div>
+    <p>行业侧揭示了"硬科技 + 制造升级"的双轮驱动格局：软件与电子信息两类数字经济行业合计贡献约 85,683 个岗位，是第二名医药制造业（17,325 条）的近 5 倍；传统地产、零售虽仍在 Top10，但已明显退居第二梯队。这意味着上市公司校招的增量基本盘已经从"地产+金融"切换到"IT+先进制造"。</p>
+
+    <div class="fig"><img src="assets/PdA2b4iVco6pZRxW1EScDysXnce.png" alt="城市招聘量 Top10"></div>
+    <div class="cap">图 2 · 招聘量 Top10 城市：北京（36,293 条）、上海（30,137 条）、深圳（26,296 条）稳居前三，杭州、广州、成都、武汉、南京、苏州、重庆依次跟进。</div>
+    <p>城市侧呈现极强的头部集聚效应：Top10 城市合计吸纳 167,369 条岗位，占总样本的 51.7%，其中仅北京一城就占 11.2%。北上深杭构成"第一梯队"，广州虽位列第五但与杭州差距明显；成都、武汉、南京、苏州构成新一线"第二梯队"，是上市公司跨区域布局的主要落点。对求职者而言，逃离北上广并不等于逃离头部岗位集群。</p>
+
+    <div class="fig"><img src="assets/Mt4FbpU79og8pDxaMm3cdOyfnGe.png" alt="学历要求分布"></div>
+    <div class="cap">图 3 · 学历要求分布：本科 44.9%、大专 32.4%、不限 11.1%、其他 9.2%、硕士 2.2%、博士 0.1%。</div>
+    <p>学历侧给出了一个反直觉的信号：上市公司招聘并不"唯学历"。本科 + 大专合计 77.3%，是绝对主力；硕士及以上仅 2.3%，说明大量技术、销售、运营、职能岗位在本科层面即可获得入场券，博士岗位则高度集中于医药、新材料等研发密集型行业。对本科生而言，"学历内卷"在岗位入口层面并不成立，真正的分层发生在岗位类型与城市选择上。</p>
+
+    <div class="fig"><img src="assets/R0OobeRRMokOC2xwQEccH07nnBg.png" alt="岗位需求 Top10"></div>
+    <div class="cap">图 4 · 招聘岗位需求 Top10：技术类（7,311 条）居首，销售/客服/技术支持（5,372 条）、财务/人力/行政（4,452 条）、制药/医疗（3,902 条）、IT/互联网（3,714 条）依次跟进。</div>
+    <p>岗位侧呈现"技术 + 通用职能 + 行业专家"的三层结构：技术类岗位是第一大入口，销售与职能岗构成第二大基本盘，制药/医疗、电子通信、房地产/建筑则是行业纵深型岗位。值得注意的是，"技术"与"IT/互联网"被拆分为两类，前者偏硬件/工程实现，后者偏软件/互联网产品，二者合计已超过 11,000 条，是应届生最大的单一就业方向。</p>
+
+    <div class="fig"><img src="assets/FmgpbHtgmozaAgxJCxqcBMtCnkc.png" alt="薪资分布直方图"></div>
+    <div class="cap">图 5 · 薪资分布直方图：平均月薪集中在 5,000—10,000 元区间（42.3%），10,000—20,000 元区间占 35.4%，低于 5,000 元占 17.9%，高于 20,000 元仅 4.4%。</div>
+    <p>薪资侧揭示了典型的右偏分布：均值 9,104 元高于中位数 8,000 元，被少数高薪岗位拉高；近 4/5 的岗位月薪落在 5,000—20,000 元区间，月薪过 2 万属于少数派。这意味着对大多数应届毕业生而言，"第一份工作月薪过万"是有数据支撑的合理预期，但不应以此作为求职基准线——分布的主体才是真实市场。</p>
+
+    <div class="fig"><img src="assets/BXXAbm17KojpECxvbphcNdUFnIb.png" alt="高薪行业 Top10"></div>
+    <div class="cap">图 6 · 平均薪资 Top10 行业：货币金融服务（11,525 元）、电信广播电视卫星传输（11,266 元）、体育（10,925 元）、互联网相关服务（10,840 元）、建筑安装（10,821 元）、软件和信息技术服务（10,722 元）依次领先。</div>
+    <p>高薪侧与招聘量侧形成有趣对照：招聘量最大的软件行业（44,352 条）平均月薪 10,722 元，并未进入 Top3；而货币金融、电信、体育这些招聘量并不靠前的行业，平均月薪反而最高。这说明"岗位多"与"薪资高"并非线性关系——金融、电信、体育是典型的"小而美"行业，而软件是"大而全"的行业，二者对应不同的职业路径选择。</p>
+  </div>
+
+  <!-- ============ 04 交互式可视化看板 ============ -->
+  <div class="secbox">
+    <h2>04 交互式可视化看板</h2>
+    <p class="dlead">静态图只能讲述一个故事，交互看板才能让读者自己提问。基于 Streamlit 构建单页应用，支持按行业、城市动态筛选，KPI 与六张图实时联动。</p>
+    <p>看板以 <code>st.cache_data</code> 缓存清洗后 CSV，首次加载约 323,818 条记录；侧边栏提供行业与城市两个下拉筛选器，主区上方是 4 张 KPI 卡片（总岗位数、平均月薪、行业数、城市数），下方依次排列行业 Top10、城市 Top10、学历饼图、高薪行业 Top10、岗位 Top10、薪资直方图，并附 100 行数据预览。</p>
+    <div class="code"><pre>@st.cache_data
+def load_data():
+    # 读取清洗后的数据，避免每次筛选都重读 CSV
+    return pd.read_csv('data/recruitment_data_cleaned.csv', encoding='utf-8')
+
+df = load_data()
+
+# 侧边栏：行业 + 城市双维度筛选
+industries = ['All'] + sorted(df['上市公司行业'].dropna().unique().tolist())
+selected_industry = st.sidebar.selectbox("Select industry", industries)
+cities = ['All'] + sorted(df['工作城市'].dropna().unique().tolist()[:20])
+selected_city = st.sidebar.selectbox("Select city", cities)
+
+filtered = df.copy()
+if selected_industry != 'All':
+    filtered = filtered[filtered['上市公司行业'] == selected_industry]
+if selected_city != 'All':
+    filtered = filtered[filtered['工作城市'] == selected_city]
+
+# KPI 卡片：总岗位数 / 平均月薪 / 行业数 / 城市数
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Total Job Posts", f"{len(filtered):,}")
+c2.metric("Avg. Monthly Salary", f"{filtered['平均月薪'].mean():.0f} CNY")
+c3.metric("Industries", f"{filtered['上市公司行业'].nunique()}")
+c4.metric("Cities", f"{filtered['工作城市'].nunique()}")</pre></div>
+    <p>运行方式：在项目根目录执行 <code>streamlit run code/dashboard.py</code>，浏览器自动打开本地端口即可交互。技术栈仅依赖 pandas + matplotlib + streamlit，无需额外数据库或前端工程，便于在面试现场快速演示。</p>
+
+    <p style="margin-top:18px;color:var(--nc);font-size:13px;font-weight:700">↓ 在线预览（基于 323,818 条样本聚合的 ECharts 可交互看板）</p>
+    <div class="dash-panel" id="recruitDash">
+      <div class="dash-kpi" id="dashKPI"></div>
+      <div class="dash-controls">
+        <div class="dash-chip-group">
+          <div class="dash-chip-label">行业</div>
+          <div class="dash-chip-list" id="dashIndChips"></div>
+        </div>
+        <div class="dash-chip-group">
+          <div class="dash-chip-label">城市</div>
+          <div class="dash-chip-list" id="dashCityChips"></div>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <div class="echart full" id="dashInd"></div>
+        <div class="echart" id="dashCityChart"></div>
+        <div class="echart" id="dashEdu"></div>
+        <div class="echart" id="dashSalary"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 05 结论与建议 ============ -->
+  <div class="secbox">
+    <h2>05 结论与建议</h2>
+    <p class="dlead">基于 323,818 条样本的实证结果，分别面向高校、学生、企业、政府四类主体给出可落地建议。</p>
+
+    <p><strong>面向高校（专业建设与就业指导）</strong></p>
+    <ul>
+      <li>软件与电子信息类岗位合计 8.5 万条，是招聘量的绝对主入口，建议计算机、软件工程、电子信息类专业持续扩招并强化工程实训；</li>
+      <li>医药制造、专用设备、汽车制造等先进制造业岗位需求稳居 Top10，应推动"传统工科 + 数字化"复合型课程改造，避免专业设置与产业脱节；</li>
+      <li>本科 + 大专合计占比 77.3%，硕士及以上仅 2.3%，说明本科教育仍是就业主力，应把就业指导重心放在本科大三、大四的岗位匹配与实习对接上，而非盲目推考研。</li>
+    </ul>
+
+    <p><strong>面向学生（技能布局与职业选择）</strong></p>
+    <ul>
+      <li>地域选择上，Top10 城市吸纳了 51.7% 的岗位，北上深杭是确定性最高的就业市场；若不愿挤北上广，成都、武汉、南京、苏州是性价比更高的新一线落点；</li>
+      <li>技能布局上，技术类岗位是第一大入口，建议在校期间至少掌握一门主语言（Python/Java）+ 一项工程能力（数据处理、前端或嵌入式），同时补通用职能（Excel、SQL、PPT）；</li>
+      <li>薪资预期上，5,000—10,000 元区间占 42.3%、10,000—20,000 元占 35.4%，第一份工作月薪过万是合理预期但不应作为硬底线；追求高薪应聚焦货币金融、电信、互联网、软件等平均月薪过万的行业。</li>
+    </ul>
+
+    <p><strong>面向企业（校招与岗位策略）</strong></p>
+    <ul>
+      <li>校招资源应向头部城市集中：北京、上海、深圳三城合计贡献 32% 的岗位，可作为校招宣讲与offer发放的主战场；</li>
+      <li>岗位画像上，技术类与销售/客服/技术支持两类岗位合计占比最高，建议在 JD 中明确本科门槛即可，不必盲目抬高到硕士；</li>
+      <li>薪资对标上，若处于软件、互联网、金融等高薪行业，平均月薪基准线应在 10,000 元以上才有竞争力；传统制造行业可参考 8,000 元中位数。</li>
+    </ul>
+
+    <p><strong>面向政府与园区（人才政策制定）</strong></p>
+    <ul>
+      <li>884 个城市中仅 Top10 吸纳过半岗位，说明人才虹吸效应显著，非头部城市需结合本地产业禀赋（如苏州—电子、武汉—光电、成都—软件）打造差异化人才政策，避免与北上深正面争夺；</li>
+      <li>软件与电子信息类岗位占比近 1/4，建议产业园区优先引入数字经济与先进制造配套企业，形成"产业—岗位—人才"闭环；</li>
+      <li>本科 + 大专合计 77.3% 的学历结构提示，高职与应用型本科人才同样是上市公司用人主力，人才政策应覆盖大专层次，避免补贴只向硕士博士倾斜。</li>
+    </ul>
+  </div>
 </div>
+
+<div data-proj="light">
+
+<h1>广东省轻食市场消费者调查与分群研究</h1>
+<div class="dmeta">
+  正式研究 N=587 份有效问卷（SPSS / AMOS）；Python 全流程可复现基于 117 份预调研问卷（问卷星）。
+  分析栈：pandas · scipy · scikit-learn · statsmodels · factor_analyzer 等价 PCA · jieba · wordcloud · matplotlib。
+  方法链：信效度检验 → 描述性画像 → 多重响应频率 → K-Means 聚类 → 差异性检验 → Logistic 回归 → 因子/SEM 路径 → 文本挖掘。
+  理论框架：SOR（外部刺激 S → 内部心理 O → 消费行为 R）。
+</div>
+
+<!-- ================= 章节 1：研究背景与分析框架 ================= -->
+<div class="secbox">
+<h2>一、研究背景与分析框架</h2>
+<p class="dlead">本研究回答的核心业务问题是：在广东省轻食市场中，究竟是谁在买、为什么买、卡在哪里、又该如何运营。
+  为避免"凭感觉下结论"，问卷以 SOR 理论为骨架——外部刺激（产品、价格、渠道、社媒）并不直接决定购买，
+  而是先改变消费者的内部心理（价值认同、情感态度），再转化为行为反应（频次、溢价、推荐、复购）。
+  量表共 24 题（李克特 5 级）：S 题组 Q11–Q20、O 题组 Q21–Q28、R 题组 Q29–Q34。
+  业务意义在于：把"营销该打哪里"从口号变成可被数据检验的传导链条。</p>
+<p>下面所有定量分析均按"先证明测量工具可靠（信效度）→ 再描述人群是谁 → 再找差异与分群 → 最后定位影响因素与机理"的顺序展开。
+  本仓库中 Python 代码以 117 份预调研问卷完整跑通全流程，其信效度、因子结构、三类客群结论与 587 份正式 SPSS 结果高度一致，
+  用以验证方法的可复现性与稳健性；正式结论以 587 份 SPSS 结果为准。</p>
+</div>
+
+<!-- ================= 章节 2：信度与效度 ================= -->
+<div class="secbox">
+<h2>二、问卷信度与效度检验</h2>
+<p class="dlead">问卷是"测量工具"，分析前必须先证明它靠得住、测得准。
+  信度用 Cronbach's α 衡量 24 道题的内部一致性（α≥0.7 可信、≥0.9 优秀）；
+  效度用 KMO 与 Bartlett 球形检验判断是否适合做因子分析（KMO≥0.7、Bartlett p&lt;0.05）。
+  这一步的业务意义是：后续所有差异、分群、回归结论，都建立在"数据本身没噪音"的前提上。</p>
+
+<div class="code"><pre># 来源：src/01_信度效度检验.py（Cronbach's α 与 KMO/Bartlett 手动实现）
+from config import *                 # 载入路径、配色、load_clean()
+from scipy import stats
+
+_, score = load_clean()               # score 为 117 行 × 24 列的量表得分
+X = score.values                     # 转 numpy 矩阵
+k = X.shape[1]                       # 题目数 = 24
+
+# ① Cronbach's α：α = k/(k-1) * (1 - 各题方差之和 / 总分方差)
+item_var = X.var(axis=0, ddof=1)     # 每一道题的方差
+total_var = X.sum(axis=1).var(ddof=1)  # 每人总分的方差
+alpha = k / (k - 1) * (1 - item_var.sum() / total_var)
+
+# ② KMO：相关系数平方和 / (相关平方和 + 偏相关平方和)
+corr = np.corrcoef(X, rowvar=False)
+inv_corr = np.linalg.pinv(corr)      # 相关矩阵求逆
+d = np.sqrt(np.diag(inv_corr))
+partial = -inv_corr / np.outer(d, d) # 偏相关系数矩阵
+np.fill_diagonal(partial, 1)
+corr_sq = corr ** 2; partial_sq = partial ** 2
+np.fill_diagonal(corr_sq, 0); np.fill_diagonal(partial_sq, 0)
+kmo = corr_sq.sum() / (corr_sq.sum() + partial_sq.sum())
+
+# ③ Bartlett 球形检验：原假设"相关矩阵是单位阵"
+n = X.shape[0]
+det = max(np.linalg.det(corr), 1e-12)
+chi2 = -((n - 1) - (2 * k + 5) / 6) * np.log(det)
+df = k * (k - 1) / 2
+p_chi2 = 1 - stats.chi2.cdf(chi2, df)</pre></div>
+
+<table>
+  <tr><th>检验项目</th><th>Python 117 份复现值</th><th>SPSS 正式 587 份</th><th>判定</th></tr>
+  <tr><td>Cronbach's α（整体信度）</td><td>0.9665</td><td>0.930</td><td>≥0.9，内部一致性很优秀</td></tr>
+  <tr><td>KMO 取样适切性</td><td>0.9265</td><td>0.955</td><td>≥0.7，适合因子分析</td></tr>
+  <tr><td>Bartlett χ²</td><td>2376.11</td><td>—</td><td>显著</td></tr>
+  <tr><td>Bartlett df</td><td>276</td><td>—</td><td>—</td></tr>
+  <tr><td>Bartlett p 值</td><td>&lt;0.001</td><td>&lt;0.001</td><td>拒绝单位阵假设，题项间存在真实相关</td></tr>
+</table>
+<p class="dlead">结果解读：两套数据、两种工具（Python 与 SPSS）独立得到 α 均在 0.93 以上、KMO 均在 0.92 以上、Bartlett 均极显著。
+  这意味着 24 道量表题高度同向、且题项间存在有意义的相关结构——问卷不是"散点式提问"，而是在稳定测量同一个轻食消费态度构念，
+  后续因子分析与结构方程模型在方法论上是站得住的。</p>
+</div>
+
+<!-- ================= 章节 3：消费者画像 ================= -->
+<div class="secbox">
+<h2>三、消费者画像与描述性统计</h2>
+<p class="dlead">这一步回答"买轻食的到底是哪类人"。对性别、城市层级、收入、职业、价格接受区间、每周食用频率做频数与占比统计。
+  业务意义是：先锁定目标人群的人口学轮廓，为后续分群与定价提供基准。
+  下列图表为 Python 基于 117 份预调研问卷的复现结果；正式 587 份样本结构更均衡（女约 60%、学生 31.9%、企业职员 31.3%），
+  二者共同指向"年轻、价格敏感、追求性价比"的核心人群。</p>
+
+<div class="code"><pre># 来源：src/02_描述统计与画像.py（基础特征频数 + 6 张统计图）
+raw, score = load_clean()
+
+def col(n):                          # 按题号匹配真实列名，如 col(1)->性别
+    for c in raw.columns:
+        if c.split("、")[0].isdigit() and int(c.split("、")[0]) == n:
+            return c
+
+# 对 6 个人口特征分别算频数与占比
+for n, label in {1:"性别",3:"城市层级",4:"月收入",5:"职业",
+                 6:"单次价格区间",7:"每周食用频率"}.items():
+    vc = raw[col(n)].value_counts()
+    pct = (vc / vc.sum() * 100).round(1)     # 占比%
+    t = pd.DataFrame({"人数": vc, "占比%": pct})
+    print(t)</pre></div>
+
+<div class="fig">
+  <img src="assets/YGTJbW2VwoV5GMxDW48cUONfnpc.png" alt="性别分布">
+  <div class="cap">图1 · 样本性别分布（女 72.6%、男 27.4%，预调研复现）</div>
+</div>
+<div class="fig">
+  <img src="assets/JSAxbk92NoxWjZxVhlOc4zRSn1c.png" alt="城市层级分布">
+  <div class="cap">图2 · 消费者所在广东省城市层级分布（珠三角核心城市占 51.3%）</div>
+</div>
+<div class="fig">
+  <img src="assets/KVDYbdUwloLet1xFbWQcD5rwnMd.png" alt="收入分布">
+  <div class="cap">图3 · 月可支配收入/生活费分布（1501–3000 元区间占 44.4%）</div>
+</div>
+<div class="fig">
+  <img src="assets/WZSvbgwQuo3tM0xW2K0cr5Mhnib.png" alt="职业分布">
+  <div class="cap">图4 · 职业身份分布（学生占 67.5%，为预调研主力人群）</div>
+</div>
+<div class="fig">
+  <img src="assets/BbkLbXICUoAszOx0zZhcFpwBnGh.png" alt="价格接受区间">
+  <div class="cap">图5 · 单次轻食消费价格接受区间（16–25 元占 41.9%、15 元及以下占 35.9%）</div>
+</div>
+<div class="fig">
+  <img src="assets/Kh1Pb6uI5ojl5QxXXZZcZolSnfd.png" alt="每周食用频率">
+  <div class="cap">图6 · 每周轻食食用频率分布（2–3 次占 41.0%、1 次及以下占 38.5%）</div>
+</div>
+
+<table>
+  <tr><th>特征</th><th>主要取值与占比（117 份复现）</th></tr>
+  <tr><td>性别</td><td>女 85 人 72.6%；男 32 人 27.4%</td></tr>
+  <tr><td>城市层级</td><td>珠三角核心（广深佛莞）60 人 51.3%；粤东/粤西/粤北 37 人 31.6%；珠三角非核心 20 人 17.1%</td></tr>
+  <tr><td>月收入/生活费</td><td>1501–3000 元 52 人 44.4%；1500 元及以下 25 人 21.4%；3001–5000 元 16 人 13.7%</td></tr>
+  <tr><td>职业</td><td>学生 79 人 67.5%；自由职业者 18 人 15.4%；企业职员 10 人 8.5%</td></tr>
+  <tr><td>价格接受区间</td><td>16–25 元 49 人 41.9%；15 元及以下 42 人 35.9%；26–40 元 22 人 18.8%</td></tr>
+  <tr><td>每周食用频率</td><td>2–3 次 48 人 41.0%；1 次及以下 45 人 38.5%；从不食用 14 人 12.0%；4–6 次 9 人 7.7%</td></tr>
+</table>
+<p class="dlead">结果解读：预调研样本女性偏多、学生占比高，是典型的"线上问卷渠道"画像；但两个关键信号在 587 份正式样本中依然稳定——
+  一是价格带高度集中在 15–25 元（合计约 78%），单次客单价天花板明显；二是食用频率呈"中间大、两头小"，每周 2–3 次为最常见形态，
+  真正高频（4 次以上）的重度用户不足一成。这说明轻食在广东仍处于"尝鲜与规律代餐之间"的渗透阶段，复购频次是比拉新更大的经营杠杆。</p>
+</div>
+
+<!-- ================= 章节 4：多重响应频率 ================= -->
+<div class="secbox">
+<h2>四、消费偏好与市场痛点：多重响应频率分析</h2>
+<p class="dlead">Q8/Q9/Q10 是多选题，每人可勾选多项，答案用"┋"分隔。
+  多重响应频率分析把所有选项拆开计数，统计"应答人数百分比"（选中该项的人数 ÷ 有效作答人数），
+  从而回答：消费者最在意什么、最想吃什么、最不满意什么。
+  业务意义是：直接定位产品与运营的"必选项"和"扣分点"。</p>
+
+<div class="code"><pre># 来源：src/03_多重响应频率分析.py（多选题拆分计数）
+def multi_freq(series, sep="┋"):
+    n_total = series.notna().sum()       # 有效作答人数
+    counter = {}
+    for ans in series.dropna():
+        for item in str(ans).split(sep): # 按全角分隔符拆开
+            item = item.strip()
+            if item:
+                counter[item] = counter.get(item, 0) + 1
+    # 按被选人次降序，输出应答人数占比
+    items_sorted = sorted(counter.items(), key=lambda kv: kv[1], reverse=True)
+    return pd.DataFrame({
+        "选项": [k for k, v in items_sorted],
+        "被选人次": [v for k, v in items_sorted],
+        "应答人数占比%": [round(v / n_total * 100, 1) for k, v in items_sorted],
+    }), n_total
+
+for n, label in {8:"核心关注因素", 9:"偏好品类", 10:"市场痛点"}.items():
+    t, n_total = multi_freq(raw[col(n)])
+    print(label, t)</pre></div>
+
+<div class="fig">
+  <img src="assets/AJyjbko8FoMKZvxzCANcAvKlnzc.png" alt="核心关注因素">
+  <div class="cap">图7 · 选择轻食的核心关注因素（热量营养配比、食材新鲜度、价格性价比并列最高）</div>
+</div>
+<div class="fig">
+  <img src="assets/ZjKEbQgavoYRh9xF5Q3cbqKznUf.png" alt="偏好品类">
+  <div class="cap">图8 · 偏好轻食品类（三明治/卷饼 61.5%、意面/杂粮饭 60.7%、沙拉 54.7%）</div>
+</div>
+<div class="fig">
+  <img src="assets/CEU0bDMVgoQJwjxP1oncrmsUnYd.png" alt="市场痛点">
+  <div class="cap">图9 · 当前市场供给主要痛点（价格偏高 72.6%、口味单一 64.1%、分量不足 59.0%）</div>
+</div>
+
+<table>
+  <tr><th>维度</th><th>选项（应答人数占比%，117 份复现）</th></tr>
+  <tr><td>核心关注因素</td><td>热量/营养配比 70.9%；食材新鲜度 70.9%；价格性价比 70.9%；分量充足度 42.7%；包装/配送时效 36.8%</td></tr>
+  <tr><td>偏好品类</td><td>三明治/卷饼 61.5%；意面/杂粮饭 60.7%；沙拉 54.7%；轻食甜品/汤羹 26.5%；预制轻食套餐 26.5%</td></tr>
+  <tr><td>市场痛点</td><td>价格偏高 72.6%；口味单一/同质化 64.1%；分量不足/饱腹感差 59.0%；营养标注不清晰 45.3%；门店不均/购买不便 40.2%；配送易变质 29.9%</td></tr>
+</table>
+<p class="dlead">结果解读：在 587 份正式样本中，价格性价比（68.5%）、食材新鲜度（62.0%）、热量营养配比（58.3%）同样位列关注因素前三，
+  品类偏好三明治/卷饼（59.5%）、意面/杂粮饭（53.7%）、沙拉（50.3%）也高度一致。
+  这组数据揭示一个被行业忽视的矛盾：消费者既把"健康"（营养、新鲜）排在最高位，又把"价格偏高、性价比不足"列为第一痛点。
+  也就是说，Z 世代要的不是"更贵的健康餐"，而是"吃得起的健康餐"——高蛋白、低卡、管饱的主食型轻食，才是真正的主力货架。</p>
+</div>
+
+<!-- ================= 章节 5：K-Means 聚类 ================= -->
+<div class="secbox">
+<h2>五、消费者分群：K-Means 聚类画像</h2>
+<p class="dlead">把 24 道量表题（1–5 分）作为刻画消费态度的特征，先标准化消除量纲，再用肘部法则确定分群数 k，
+  最后用 K-Means 把消费者分成若干群体并逐一画像。业务意义是：把"大众市场"拆成可差异化运营的客群，
+  避免用一套话术对所有人说话。</p>
+
+<div class="code"><pre># 来源：src/04_聚类分析.py（肘部法则 + K-Means + 中心还原 + 雷达图）
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+Xs = StandardScaler().fit_transform(X)   # 标准化，消除量纲影响
+
+# ① 肘部法则：k=1~8，看簇内平方和 SSE 的拐点
+for k in range(1, 9):
+    km = KMeans(n_clusters=k, n_init=10, random_state=42).fit(Xs)
+    sse.append(km.inertia_)             # inertia_ = 簇内平方和
+
+# ② 取 k=3 正式聚类
+km = KMeans(n_clusters=3, n_init=20, random_state=42)
+labels = km.fit_predict(Xs)
+
+# ③ 标准化中心反变换回 1-5 分量表，便于业务解读
+scaler = StandardScaler().fit(X)
+centers_raw = scaler.inverse_transform(km.cluster_centers_)
+center_df = pd.DataFrame(centers_raw, columns=score.columns)
+center_df["总体态度均分"] = center_df.mean(axis=1).round(2)</pre></div>
+
+<div class="fig">
+  <img src="assets/RZV1bQCGdoR97UxNbyCc3j3Cnyd.png" alt="肘部法则">
+  <div class="cap">图10 · 肘部法则确定最优分群数（k=3 处出现明显拐点）</div>
+</div>
+<div class="fig">
+  <img src="assets/VQXLbvf9So3oBZx8au3cEj5snog.png" alt="聚类雷达图">
+  <div class="cap">图11 · 三类消费者群体在六个态度维度上的对比雷达图</div>
+</div>
+
+<table>
+  <tr><th>客群（587 份正式）</th><th>规模与占比</th><th>S/O/R 中心特征</th><th>Python 117 份均分</th><th>Python 规模</th></tr>
+  <tr><td>主力型</td><td>278 人 / 47.4%</td><td>4.36 / 4.39 / 4.25（最高）</td><td>4.90</td><td>42 人 / 35.9%</td></tr>
+  <tr><td>潜力型</td><td>188 人 / 32.0%</td><td>3.79 / 3.84 / 3.77，价格接受度最高</td><td>3.99</td><td>46 人 / 39.3%</td></tr>
+  <tr><td>价格敏感型</td><td>121 人 / 20.6%</td><td>2.77 / 2.69 / 2.55（最低）</td><td>3.13</td><td>29 人 / 24.8%</td></tr>
+</table>
+<p class="dlead">聚类中心画像（117 份复现）：群体二（主力型，均分 4.90）在 24 题上几乎全线接近满分，女性占比 83.3%、且有 7.1% 愿意接受 41–60 元价位；
+  群体一（潜力型，均分 3.99）态度居中、价格接受度灵活；群体三（价格敏感型，均分 3.13）男性占比高达 44.8%、44.8% 集中在 15 元及以下价位，
+  但 13.8% 已达到每周 4–6 次的高频。
+  结果解读：两套工具（Python K-Means 与 SPSS 二阶聚类）都收敛到 3 类，且"主力/潜力/价格敏感"的结构与画像高度稳定。
+  最值得注意的是价格敏感型并非"低频用户"——他们吃得勤却不愿为溢价买单，是典型的"流量型客群"；而主力型是高客单、高忠诚的"利润型客群"，
+  潜力型则是介于两者之间、最易被产品与营销撬动的"转化型客群"。</p>
+</div>
+
+<!-- ================= 章节 6：差异性检验 ================= -->
+<div class="secbox">
+<h2>六、消费者差异性检验</h2>
+<p class="dlead">检验不同人口特征（性别、收入、职业）在"轻食总体态度均分"上是否存在显著差异。
+  性别用独立样本 t 检验，收入与职业用单因素方差分析（ANOVA）。
+  业务意义是：判断营销资源是否需要按人群细分投放。</p>
+
+<div class="code"><pre># 来源：src/05_差异性分析.py（t 检验 + 单因素 ANOVA）
+raw["态度均分"] = score.mean(axis=1)         # 每人 24 题平均分
+
+# ① 性别：两组独立样本 Welch t 检验
+g = [raw.loc[raw[col(1)] == x, "态度均分"] for x in raw[col(1)].dropna().unique()]
+t, p = stats.ttest_ind(g[0], g[1], equal_var=False)
+
+# ② 收入 / 职业：单因素方差分析
+def anova_test(qnum, title, order=None):
+    cats = [x for x in order] if order else list(raw[col(qnum)].dropna().unique())
+    data = [raw.loc[raw[col(qnum)] == x, "态度均分"].values for x in cats]
+    F, p = stats.f_oneway(*data)            # F 统计量
+    return title, F, p
+
+anova_test(4, "不同收入水平态度差异")
+anova_test(5, "不同职业身份态度差异")</pre></div>
+
+<div class="fig">
+  <img src="assets/Lu0bb73P3om478xllbBcV7Mgnjd.png" alt="性别差异箱线图">
+  <div class="cap">图12 · 不同性别的轻食总体态度分布（箱线图）</div>
+</div>
+<div class="fig">
+  <img src="assets/HCgHbU5sfolTh6xruyIcj0I7npc.png" alt="收入差异箱线图">
+  <div class="cap">图13 · 不同收入水平的轻食总体态度分布（箱线图）</div>
+</div>
+
+<table>
+  <tr><th>分析维度</th><th>检验方法</th><th>统计量（117 份复现）</th><th>p 值</th><th>结论</th></tr>
+  <tr><td>性别差异</td><td>独立样本 t</td><td>t = -1.631</td><td>0.1097</td><td>差异不显著</td></tr>
+  <tr><td>不同收入水平</td><td>单因素 ANOVA</td><td>F = 0.483</td><td>0.7887</td><td>差异不显著</td></tr>
+  <tr><td>不同职业身份</td><td>单因素 ANOVA</td><td>F = 0.960</td><td>0.4457</td><td>差异不显著</td></tr>
+</table>
+<p class="dlead">结果解读：在 117 份预调研样本中，性别、收入、职业对"总体态度均分"的影响均不显著（p 均大于 0.05）——
+  这说明轻食态度是一个"跨人群共识"，而非某一性别或收入层的专属偏好。
+  但 587 份正式样本揭示了两个更细的显著点：一是男女在沙拉类偏好上差异显著（χ²=11.194，p&lt;0.001），女性显著更高；
+  二是外部刺激感知 S_mean 在不同收入组间有显著差异（F=2.382，p=0.037），价格接受度随收入升高明显提升。
+  业务含义是：不必按性别做整体区隔，但沙拉品类可向女性倾斜；定价策略则必须做收入分层——对高收入群体可推溢价套餐，对大众群体守住房性价锚点。</p>
+</div>
+
+<!-- ================= 章节 7：Logistic 回归 ================= -->
+<div class="secbox">
+<h2>七、高频消费意愿影响因素：Logistic 回归</h2>
+<p class="dlead">这一步回答"哪些因素会让一个人成为高频食用者"。把"每周吃 2 次及以上"设为二分类因变量 y（高频=1），
+  24 道量表题标准化后为自变量，用 statsmodels 跑逻辑回归，输出系数 β、优势比 OR 与 p 值，
+  再用向前逐步筛选只保留显著变量。OR 解读：OR=1.63 表示该因素每提升 1 个单位，成为高频消费者的胜算提高约 63%。</p>
+
+<div class="code"><pre># 来源：src/06_Logistic回归.py（二分类因变量 + 全变量/逐步回归）
+import statsmodels.api as sm
+
+# ① 构造二分类因变量：每周≥2次为高频
+high_levels = ["2-3 次", "4-6 次", "7 次及以上"]
+y = raw[col(7)].isin(high_levels).astype(int)
+
+Xs = StandardScaler().fit_transform(score.values)   # 标准化自变量
+Xc = sm.add_constant(Xs)
+model_full = sm.Logit(y, Xc).fit(disp=0)             # 全变量逻辑回归
+coef = model_full.params[1:]
+pvals = model_full.pvalues[1:]
+ors = np.exp(coef)                       # OR = e^β
+
+# ② 向前逐步：只保留 p<0.05 的变量
+def forward_logit(Xdf, yv, sig_in=0.05):
+    remaining = list(Xdf.columns); selected = []
+    while remaining:
+        scores = []
+        for cand in remaining:
+            trial = selected + [cand]
+            m = sm.Logit(yv, sm.add_constant(Xdf[trial])).fit(disp=0)
+            scores.append((m.aic, cand, m.pvalues[cand]))
+        scores.sort(key=lambda z: z[0])
+        if scores[0][2] < sig_in:
+            selected.append(scores[0][1]); remaining.remove(scores[0][1])
+        else:
+            break
+    return selected</pre></div>
+
+<div class="fig">
+  <img src="assets/ONg3bK0hfoVhajxHmZncsGscn4U.png" alt="Logistic OR 森林图">
+  <div class="cap">图14 · 高频消费意愿显著影响因素的 OR 值（虚线为 OR=1 参考线）</div>
+</div>
+
+<table>
+  <tr><th>变量（117 份复现）</th><th>系数 β</th><th>优势比 OR</th><th>p 值</th></tr>
+  <tr><td>Q31 愿为高品质高营养支付溢价</td><td>0.488</td><td>1.63</td><td>0.0147</td></tr>
+</table>
+<p class="dlead">结果解读：在 117 份复现中，向前逐步筛选后唯一显著的变量是 Q31（愿为高品质高营养支付溢价），OR=1.63、p=0.015，
+  即"愿意为健康溢价买单"的人，成为高频消费者的胜算高出约 63%。
+  587 份正式样本则进一步识别出两个可操作的显著正向因素：价格性价比 OR=1.636（p=0.026）、包装/配送时效 OR=1.549（p=0.045）；
+  而甜品/汤羹偏好对"主食类强偏好"呈负向（OR=0.408）。
+  这组结果揭示了一个关键的人群分化：正餐型轻食消费者（追求主食、性价比、配送效率）与尝鲜型消费者（追求甜品、新奇）是两类不同的人，
+  运营上不应把"沙拉"和"轻食甜品"混在同一个货架里主推。</p>
+</div>
+
+<!-- ================= 章节 8：因子分析与 SOR 路径 ================= -->
+<div class="secbox">
+<h2>八、因子分析与 SOR 传导路径（SEM 复刻）</h2>
+<p class="dlead">原报告用结构方程模型（AMOS）验证"外部刺激→内部心理→消费行为"的传导。
+  在没有 AMOS 的情况下，这里用可完全复现的 Python 等价流程：先对 24 题做主成分因子分析（特征值>1 提取公因子），
+  再按理论框架构造 4 个潜变量，计算它们之间的 Pearson 相关，刻画传导路径强弱。
+  业务意义是：回答"营销到底是先改变认知，还是直接改变行为"。</p>
+
+<div class="code"><pre># 来源：src/07_结构方程因子分析.py（PCA 因子提取 + 潜变量相关路径）
+from sklearn.decomposition import PCA
+
+X = StandardScaler().fit_transform(score.values)
+pca_full = PCA().fit(X)
+eig = pca_full.explained_variance_
+n_factor = int((eig > 1).sum())        # 特征值>1 的公因子数
+print("累计方差解释率 =",
+      pca_full.explained_variance_ratio_[:n_factor].sum() * 100)
+
+# 按 SOR 框架构造 4 个潜变量（题组取均值）
+latent_def = {
+    "外部刺激": ["Q15","Q16","Q17","Q18","Q19","Q20"],
+    "价值认同": ["Q21","Q22","Q24","Q26","Q28"],
+    "情感态度": ["Q23","Q25","Q27"],
+    "行为倾向": ["Q29","Q30","Q31","Q32","Q33","Q34"],
+}
+lat = pd.DataFrame({n: score[qs].mean(axis=1) for n, qs in latent_def.items()})
+
+# 核心链式路径的相关系数与显著性
+for a, b in [("外部刺激","价值认同"),("价值认同","情感态度"),
+             ("情感态度","行为倾向"),("外部刺激","行为倾向")]:
+    r, p = stats.pearsonr(lat[a], lat[b])
+    print(f"{a} → {b}: r={r:.3f}, p={p:.2e}")</pre></div>
+
+<div class="fig">
+  <img src="assets/QLp4bEvljo0RjNx9L8ccuJd2n7c.png" alt="因子碎石图">
+  <div class="cap">图15 · 因子分析碎石图（特征值在 k=3 附近跌破 1，形成明显拐点）</div>
+</div>
+<div class="fig">
+  <img src="assets/GTjVb5BzMorLwxxhCGscSJCmn6E.png" alt="潜变量相关热力图">
+  <div class="cap">图16 · 四个潜变量之间的相关矩阵热力图（颜色越深相关越强）</div>
+</div>
+
+<table>
+  <tr><th>传导路径</th><th>相关系数 r（117 份复现）</th><th>p 值</th><th>显著性</th></tr>
+  <tr><td>外部刺激 → 价值认同</td><td>0.858</td><td>&lt;0.001</td><td>***</td></tr>
+  <tr><td>价值认同 → 情感态度</td><td>0.834</td><td>&lt;0.001</td><td>***</td></tr>
+  <tr><td>情感态度 → 行为倾向</td><td>0.840</td><td>&lt;0.001</td><td>***</td></tr>
+  <tr><td>外部刺激 → 行为倾向（直接路径）</td><td>0.729</td><td>&lt;0.001</td><td>***</td></tr>
+</table>
+<p class="dlead">结果解读：主成分分析提取 3 个特征值&gt;1 的公因子，累计方差解释率 67.5%（SPSS 正式为 67.2%）。
+  SOR 链式传导在统计上高度成立：外部刺激→价值认同（r=0.858）→情感态度（r=0.834）→行为倾向（r=0.840），三段均 p&lt;0.001。
+  值得注意的是，外部刺激到行为倾向的直接相关（r=0.729）反而低于经由"价值认同→情感态度"的间接路径（0.858×0.834×0.840 量级）。
+  这从数据上印证了 SOR 的核心假设：营销刺激不能直接命令购买，必须先让消费者在心理上"认同健康价值、产生情感认同"，
+  才会转化为高频复购与推荐。587 份正式样本的 AMOS 结构方程模型（RMR=0.033、GFI=0.903、NFI=0.977）拟合良好，H1–H10 多条路径通过显著性检验。</p>
+</div>
+
+<!-- ================= 章节 9：文本挖掘 ================= -->
+<div class="secbox">
+<h2>九、消费者声音文本挖掘</h2>
+<p class="dlead">把 Q36 改进期望、Q8/Q9/Q10 的多选短语拼成语料，用 jieba 分词、去停用词后做词频统计与词云，
+  从非结构化文本中捕捉消费者"自己说出来"的诉求。
+  业务意义是：用开放文本与前面的定量结论做三角验证，避免被结构化选项的预设框架限制。</p>
+
+<div class="code"><pre># 来源：src/08_文本挖掘词云.py（jieba 分词 + 词频 + 词云）
+import jieba
+from collections import Counter
+
+# ① 汇总所有文本，分隔符统一替换为空格
+text_cols = [col(8), col(9), col(10), col(36)]
+corpus = " ".join(
+    str(v).replace("┋"," ").replace("〖"," ").replace("〗"," ")
+    for c in text_cols for v in raw[c].dropna()
+)
+
+# ② 自定义词典，让专业词不被切碎
+for w in ["轻食","性价比","营养配比","低卡","高蛋白","营养均衡",
+          "新鲜度","本地化","个性化","可追溯","杂粮饭","三明治"]:
+    jieba.add_word(w)
+
+# ③ 分词 + 去停用词/单字，统计词频
+stop = set("的 了 和 与 及 或 是 在 有 更 等 都 会 能 也 很 但 对".split())
+words = [w for w in jieba.lcut(corpus)
+         if len(w) >= 2 and w not in stop and not w.isdigit()]
+freq = Counter(words)
+top = freq.most_common(25)</pre></div>
+
+<div class="fig">
+  <img src="assets/HRXhb3xsXopVIXx4hTycqhjZnpb.png" alt="消费者声音词云">
+  <div class="cap">图17 · 消费者声音词云（关注因素·品类·痛点·改进期望）</div>
+</div>
+<div class="fig">
+  <img src="assets/TpKYbmUKIopfEOx9zjYcS68envc.png" alt="高频词 TOP15">
+  <div class="cap">图18 · 消费者声音高频词 TOP15（条形图）</div>
+</div>
+
+<table>
+  <tr><th>排名</th><th>关键词</th><th>频次</th></tr>
+  <tr><td>1</td><td>价格 / 性价比</td><td>263 / 263</td></tr>
+  <tr><td>2</td><td>沙拉 / 营养</td><td>192 / 192</td></tr>
+  <tr><td>3</td><td>口味</td><td>176</td></tr>
+  <tr><td>4</td><td>食材</td><td>167</td></tr>
+  <tr><td>5</td><td>低卡 / 不足</td><td>154 / 154</td></tr>
+  <tr><td>6</td><td>配送</td><td>129</td></tr>
+  <tr><td>7</td><td>分量</td><td>119</td></tr>
+  <tr><td>8</td><td>丰富 / 创新 / 菜品 / 种类</td><td>101 / 101 / 101 / 101</td></tr>
+</table>
+<p class="dlead">结果解读：高频词几乎被"价格、性价比、营养、沙拉、口味、食材、低卡、分量、配送"占据——
+  这与定量部分的结论形成了清晰的三角验证：开放文本里消费者喊得最响的仍是"价格亲民、营养透明、口味创新、配送靠谱"。
+  尤其"不足"一词紧随"价格、分量"出现，说明痛点叙事高度集中在"价格偏高、分量不足"；而"丰富、创新、菜品、种类"高频出现，
+  则与多选题中"口味单一、同质化严重"的痛点相互呼应。文本挖掘的价值在于：它证明了前面所有的定量结论不是"问卷设计诱导出来的假相关"，
+  而是消费者自发表达的真实诉求。</p>
+</div>
+
+<!-- ================= 章节 10：结论与建议 ================= -->
+<div class="secbox">
+<h2>十、结论与建议</h2>
+<p class="dlead">综合 587 份正式问卷与 117 份 Python 复现的全链条结果，广东省轻食市场的核心画像可以概括为一句话：
+  一群年轻、价格敏感、把健康当刚需但钱包有限的消费者，正在用"每周 2–3 次"的节奏试探性地选择轻食，
+  而市场的第一痛点不是"不够健康"，而是"不够便宜、不够好吃、不够管饱"。</p>
+
+<p><strong>1. 定价策略：守住 15–25 元主力价格带，用分层菜单承接三类客群。</strong>
+  数据显示约 78% 的消费者单次价格接受区间集中在 15–25 元，且 72.6% 把"价格偏高、性价比不足"列为第一痛点。
+  建议主力型客群（278 人 / 47.4%，态度均分最高、女性占比高）推 26–40 元的"高蛋白+营养升级"套餐，承接其愿意为健康溢价买单的特征（Q31 OR=1.63）；
+  对价格敏感型客群（121 人 / 20.6%，44.8% 集中在 15 元及以下）推出 12–15 元的"基础款主食轻食"作为引流款，
+  避免用高客单价格把这部分高频但低客单的流量型客群挡在门外。</p>
+
+<p><strong>2. 产品策略：把"主食型轻食"做成货架主力，弱化"沙拉=轻食"的刻板印象。</strong>
+  偏好品类中三明治/卷饼（59.5%）与意面/杂粮饭（53.7%）均高于沙拉（50.3%），
+  且 Logistic 显示甜品/汤羹偏好对"主食类强偏好"呈负向（OR=0.408）。
+  建议门店 SKU 结构以"低卡主食+优质蛋白+足量蔬菜"的正餐型产品为主，
+  针对女性显著偏好沙拉品类（χ²=11.194，p&lt;0.001）保留沙拉专线，但不要把沙拉作为唯一招牌；
+  同时针对"分量不足、饱腹感差"痛点（59.0%）推出可加量的"饱腹版"，直接解决复购的物理障碍。</p>
+
+<p><strong>3. 运营策略：用"价值认同→情感态度"的链式传导设计营销，而非直接打价格战。</strong>
+  SOR 路径分析显示外部刺激经由价值认同（r=0.858）→情感态度（r=0.834）→行为倾向（r=0.840）的间接传导，
+  强于直接刺激行为（r=0.729）。这意味着营销不应只靠"打折"，而应通过可视化营养标注、食材可追溯、粤式本地化口味等内容，
+  先让消费者在心理上认同"这是健康的、值得坚持的生活方式"，再转化为复购。
+  文本挖掘中"透明、可追溯、来源、信息"高频出现（各 84 次），正好印证了"营养透明化"是低成本高回报的运营抓手。</p>
+
+<p><strong>4. 复购设计：把"每周 2–3 次"的中间人群（潜力型，188 人 / 32.0%）作为转化主战场。</strong>
+  数据显示真正高频（4 次以上）的重度用户不足一成，而潜力型客群态度居中、价格接受度灵活、是最易被撬动的转化型人群。
+  建议围绕他们设计"周卡/月卡"订阅制与会员积分体系，配合"包装/配送时效"（OR=1.549，p=0.045）这一显著正向因素，
+  优化外卖履约体验，把"偶尔尝鲜"转化为"规律代餐"；
+  同时对主力型客群建立社群与新品优先试吃机制，利用其高推荐意愿形成口碑扩散。</p>
+
+<p><strong>5. 渠道与痛点治理：针对"门店不均、购买不便"（40.2%）与"配送易变质"（29.9%）做履约优化。</strong>
+  珠三角核心城市占样本 51.3%，但线下门店分布不均是第二大线下痛点。建议在广深佛莞高校与写字楼密集区加密前置仓与自提点，
+  并在配送环节针对"轻食易变质、口感受损"优化冷链包装，把"配送体验"从扣分点转化为差异化卖点。</p>
+
+<p class="dlead">研究局限：Python 复刻基于 117 份预调研样本，部分需要大样本才显著的效应以 587 份 SPSS 结果为准；
+  样本以线上渠道、年轻学生为主，地域与人群可进一步扩展；SEM 在 Python 中以因子分析+相关路径近似，严格的潜变量拟合与中介 Bootstrap 仍以 AMOS 输出为准。</p>
+</div>
+
+</div>
+    <div data-proj="esl">
+  <h1>维界投影 · ESL 电子价签中台：行业数据分析</h1>
+  <div class="dmeta">口径说明：全球市场规模为 6 家机构 2025 年区间并存（1.52–3.10 十亿美元）；出货量跨 CINNO / ePaper Insight / 洛图科技 RUNTO 口径；市占为 VusionGroup / 汉朔 / SOLUM 不同年份与口径混合，仅作量级参考；所有数据来源 URL 已归档，无单点编造。</div>
+
+  <div class="secbox">
+    <h2>01 研究背景与目标</h2>
+    <p>维界投影定位为基于 HDaaS 架构的智能物联数字孪生平台，核心是一层「中立」的 ESL 电子价签中台——多品牌兼容、多协议适配、感知层数据归一化。立项前需要回答一个业务问题：硬件已经很便宜（2.13 寸国际批发 0.85–1.15 美元/枚），为什么还要再做一个软件层？</p>
+    <p>本项目的目标是用真实公开数据回答三件事：第一，全球与中国 ESL 市场到底有多大、增速多快；第二，竞品格局是垄断还是分散，中立中台有没有切入缝隙；第三，客户的痛点与付费意愿，是否足以支撑「硬件 + SaaS」方向。所有结论都要能被一条原始数据 URL 复核。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>02 数据来源与核验方法</h2>
+    <p>数据收集覆盖四类来源：国际市场研究机构（Global Market Insights、Grand View、Mordor、Polaris、PW Consulting、Dataintelo）、中文产业研究（CINNO、洛图科技 RUNTO、ePaper Insight、元太科技转述）、上市公司一手财报（VusionGroup 官网、汉朔科技深交所公告、Pricer 年报、SOLUM 官网）、以及政策原文（中国政府网、欧盟 EUR-Lex）。去重后共 104 个来源 URL，全部记录在 <code>docs/数据来源清单.md</code>。</p>
+    <p>核验采用三级可信度标注：<b>verified</b>（一手财报或两家以上独立来源一致）、<b>estimate</b>（媒体转述或有依据推算）、<b>pending_note</b>（口径冲突或待核实）。当不同机构给出的市场规模差距超过 1 倍时，不强行取均值，而是并存引用并在报告中写明口径差异。</p>
+    <pre><code># code/analysis.py：多机构口径并存，不做单点编造
+g = read_csv("market_size_global.csv")
+s25 = [float(r["value_usd_bn"]) for r in g if r["year"].strip() == "2025"]
+# 输出 min / max / mean / median，让读者自己判断
+out(f"样本机构数：{len(s25)}")
+out(f"最小值/最大值：{min(s25):.2f} / {max(s25):.2f} 十亿美元")
+out(f"区间跨度约 {max(s25)-min(s25):.2f} 十亿美元 → 机构口径差异大，报告并存引用")</code></pre>
+    <p>这种「区间 + 口径」写法，是数据分析师区别于「抄 PPT 数字」的关键：例如项目原始材料中「2025 全球 ESL 市场 58 亿美元」「中国渗透率不足 10%」「SaaS 占 70%」等说法，经核验后被分别修正为 22.1 亿美元均值、2024 商超约 30%、以及「70% 是项目目标而非行业现状」。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>03 全球市场规模与增长</h2>
+    <p>2025 年全球 ESL 市场规模，6 家机构给出的区间为 1.52–3.10 十亿美元，均值 2.21、中位数 2.04，区间跨度约 1.58 十亿美元。这意味着：任何对外只引用一个「2025 年 X 亿美元」的说法，本质上都在押注某一家机构的乐观/保守口径。</p>
+    <div class="fig"><img src="assets/Pl3TbpKKzovpzFx2PAMcf5X6n6e.png" alt="全球市场规模多机构对比"></div>
+    <div class="cap">图1 · 2025 年全球 ESL 市场规模多机构口径对比（Global Market Insights / Grand View / Mordor / Polaris / PW Consulting / Dataintelo）</div>
+    <p>解读：口径差异主要来自「是否含软件/服务收入」「是否把显示屏和智能导轨计入」以及「预测期是否外推」。维界投影在对外引用时统一使用「2025 年全球约 20–30 亿美元、中性区间」的表述，避免单点数字被追问时翻车。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>04 出货量与 CAGR</h2>
+    <p>出货量比市场规模更难被口径污染。CINNO 援引汉朔科技招股书给出 2021 年 1.67 亿片、2022 年 2.83 亿片、2023 年 3.02 亿片；ePaper Insight 给出 2024 年 3.7 亿台、2025 年 5.0 亿台；洛图科技 RUNTO 给出 2025 年 5.4 亿片、2026H1 1.7 亿片。</p>
+    <pre><code># code/analysis.py：跨机构口径的量级 CAGR（明确标注"估算"）
+v21 = float([r["units"] for r in sh if r["year"].strip()=="2021"][0])  # 1.67
+v25 = float([r["units"] for r in sh if r["year"].strip()=="2025"][0])  # 5.00
+cagr = (v25 / v21) ** (1/4) - 1   # 约 31.5%/年
+out(f"量级 CAGR（跨机构口径估算）：约 {cagr*100:.1f}%/年")</code></pre>
+    <div class="fig"><img src="assets/WaLVbwzLNoAMTdxwvOlcumFUnhg.png" alt="全球电子价签出货量趋势"></div>
+    <div class="cap">图2 · 全球电子价签出货量趋势（CINNO / ePaper Insight / 洛图科技 RUNTO 跨机构口径）</div>
+    <p>解读：31.5% 的量级 CAGR 远高于传统零售 IT 个位数增速，说明 ESL 正在从「商超促销耗材」升级为「数字化入口」——这也是为什么维界投影敢于在硬件之上再做一层软件中台：出货量越大，多品牌混用带来的运维复杂度越高。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>05 区域市场结构</h2>
+    <p>区域收入占比同样是多机构并存：欧洲在 GMI 口径下 32.0%、Polaris 口径下 40.1%、PW Consulting 口径下 39.4%；北美在 PW Consulting 口径下 36.4%、在 Dataintelo 口径下仅 19.2%；亚太在 Dataintelo 口径下高达 42.3%。</p>
+    <div class="fig"><img src="assets/OAETbVc6Fo0gXAxpqtScqWc7nQd.png" alt="区域市场结构对比"></div>
+    <div class="cap">图3 · 2025 年全球 ESL 区域收入占比多机构对比（GMI / Polaris / PW Consulting / Dataintelo）</div>
+    <p>解读：口径打架的背后，是欧洲（家乐福、欧尚、ALDI 等）与北美（沃尔玛）是「存量替换市场」，而亚太（中国、东南亚）是「增量新建市场」。对维界投影这种后发中台而言，亚太增速更快、客户更愿意接受多品牌兼容方案，是更现实的切入点。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>06 中国市场与渗透率</h2>
+    <p>中国 ESL 市场规模各来源均值约 50.6 亿元，区间 2.4–100.2 亿元；2025 年 3 个来源均值约 45.3 亿元。渗透率是本项目修正最多的一项：2020 年中国商超约 5%，2024 年商超整体约 30%，其中一二线城市商超约 60%、三四线城市约 15%。</p>
+    <div class="fig"><img src="assets/FzhOb9FWsoyXgWx1YKqcgCEBnQv.png" alt="中国市场规模与渗透率"></div>
+    <div class="cap">图4 · 中国 ESL 市场规模与渗透率演进（多来源并存口径）</div>
+    <div class="fig"><img src="assets/GXa3bUFhZoW5TDxV5ChcnlL0nQf.png" alt="中外渗透率对比"></div>
+    <div class="cap">图5 · 中外 ESL 渗透率对比（中国商超 2020/2024 与欧美发达国家 2025，洛图科技 / Global Market Insights）</div>
+    <p>解读：项目原 PPT 中「2026 年渗透率破 68.4%」经核验未找到权威出处，仅见于豆丁网内容农场报告，已弃用；改用「2023 全球约 15%、2026 中国商超近 30%」的真实口径。三四线城市 15% vs 一二线 60% 的落差，正是维界投影「低成本兼容中台」能切入的下沉空间。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>07 竞品格局与市占</h2>
+    <p>全球市占：VusionGroup 约 44%（2024 按出货量，中国电子视像行业协会）、汉朔科技约 28%（2023 全球，CINNO 口径，中国市占约 62%）、SOLUM 约 12.3%（2025，estimate）。头部三家个体市占合计约 84%，CR5（Vusion/汉朔/Solum/Pricer/Displaydata）约 93.7%。</p>
+    <pre><code># code/analysis.py：头部个体市占合计与 CR5 分别计算
+individual = [r for r in cs if not r["company"].startswith("CR")]
+gsum = sum(float(r["share_pct"]) for r in individual if r.get("scope","")=="全球")
+# gsum ≈ 84.3%（Vusion 44 + 汉朔 28 + SOLUM 12.3，跨年份口径，仅量级参考）
+# CR5 行单独记录 93.7%</code></pre>
+    <div class="fig"><img src="assets/EBtwbPROPoHuhMxHbFJcdKXwnEg.png" alt="竞品市占率"></div>
+    <div class="cap">图6 · 全球 ESL 竞品市占率（VusionGroup / 汉朔 / SOLUM / Pricer / Displaydata，跨年份口径）</div>
+    <div class="fig"><img src="assets/YEpmbRSKwopQNUxFqgncpoaxnKf.png" alt="竞品营收对比"></div>
+    <div class="cap">图7 · 主要竞品营收对比（汉朔科技 2024/2025、VusionGroup 2024/2025、Pricer AB 2024/2025、SOLUM 2025，财报原文）</div>
+    <p>解读：CR5 93.7% 看似集中，但单家最高仅 44%——没有一家能垄断协议栈。这恰恰是「中立中台」的生存空间：Vusion 锁定沃尔玛、汉朔锁定 ALDI 与海外客户，中型零售商和下沉市场不可能被任何一家完全锁定。VusionGroup 2025 营收 15.27 亿欧元（+51%）、汉朔 2024 营收 44.86 亿元，说明行业仍在快速扩张，不是存量博弈。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>08 产业链与商业模式</h2>
+    <p>上游是电子纸显示模组（元太科技等）与通信芯片；中游是硬件品牌（Vusion/汉朔/Pricer/SOLUM/京东方）；下游是连锁商超、便利店、药品零售与仓储。中国连锁 Top100 2024 年销售规模 2.13 万亿元、门店 25.72 万个，是 ESL 付费的基本盘。</p>
+    <div class="fig"><img src="assets/QVXbbV2KBoNz54xJr8ScUtfEnTc.png" alt="产业链结构"></div>
+    <div class="cap">图8 · ESL 产业链结构（上游电子纸/芯片 → 中游硬件品牌 → 下游零售客户）</div>
+    <p>商业模式上，行业两家龙头的 SaaS/服务收入占比都很低：VusionGroup 2024 年经常性服务收入 5740 万欧元，约占总营收 6%；汉朔 2025 年软件/SaaS/技术服务 1.83 亿元，占比 4.33%。维界投影自述目标 SaaS 占营收 70%+，这是与行业现状的显著差异，必须在对外讲清「这是差异化定位而非行业基准」。</p>
+    <div class="fig"><img src="assets/NmdRb3cvFobInqxid2vc7J3ynLb.png" alt="SaaS 收入占比对比"></div>
+    <div class="cap">图9 · 行业 SaaS/服务收入占比对比（VusionGroup 约 6%、汉朔约 4.33%、维界投影目标 70%+，项目自述）</div>
+    <div class="fig"><img src="assets/LUTSbQDKNo7TF1xDPLuc79tFn88.png" alt="客户 ROI 与付费能力"></div>
+    <div class="cap">图10 · 客户 ROI 与付费能力数据（行业引用 Deloitte 口径换标成本降 60–80%；中国连锁 Top100 销售 2.13 万亿、门店 25.72 万，CCFA）</div>
+    <p>解读：换标人工从纸质 3 分钟/个降到 ESL 30 秒全网同步、耗材成本降约 85%，是客户愿意付费的直接理由；而「多品牌混用导致运维成本升 300%、换 ERP 单次损失约百万」（项目内部调研，标注非公开数据），则是维界投影「兼容中台」最直接的价值锚点。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>09 政策驱动</h2>
+    <p>政策端分两条线。欧盟侧是绿色新政组合拳：ESPR 2024/1781（数字产品护照 DPP）、PPWR 2025/40（包装与包装废弃物）、ECGT 2024/825（反漂绿指令，2026-09-27 适用），要求店内环保/价格信息「实时、可核验」，直接利好动态电子价签替代纸质。中国侧是《数字商务三年行动计划（2024–2026）》与《零售业创新提升工程实施方案》，但原文并未出现「电子价签」四字，仅提「智慧商圈、智慧商店」——这是数据核验中修正过的一条，不能照抄 PPT。</p>
+    <div class="fig"><img src="assets/ZEjLbA8I3opjqCxIIJGcE9bInDc.png" alt="政策时间线"></div>
+    <div class="cap">图11 · 中外 ESL 相关政策时间线（中国政府网 / 欧盟 EUR-Lex，含 DPP 2027 电池类强制节点）</div>
+    <p>解读：欧盟 DPP 电池类 2027-02-18 强制落地，是一个确定性的合规需求释放节点——届时货架上每一件电池类商品都需要可核验的数字身份信息，ESL 是最自然的店内载体。维界投影的中台如果在 2026 年完成多协议适配，正好踩在这个时间窗上。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>10 核心发现与建议</h2>
+    <p style="margin-top:18px;color:var(--nc);font-size:13px;font-weight:700">↓ 交互式行业数据看板（数据来自真实 CSV / 多机构口径，可筛选）</p>
+    <div class="dash-panel" id="eslDash">
+      <div class="dash-kpi" id="eslKPI"></div>
+      <div class="dash-controls">
+        <div class="dash-chip-group">
+          <div class="dash-chip-label">市场规模 · 机构口径（2025，可勾选）</div>
+          <div class="dash-chip-list" id="eslMktChips"></div>
+        </div>
+        <div class="dash-chip-group">
+          <div class="dash-chip-label">出货量 · 来源口径（可勾选）</div>
+          <div class="dash-chip-list" id="eslShipChips"></div>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <div class="echart full" id="eslMktSize"></div>
+        <div class="echart" id="eslShip"></div>
+        <div class="echart" id="eslRegion"></div>
+        <div class="echart" id="eslPenet"></div>
+        <div class="echart" id="eslComp"></div>
+        <div class="echart" id="eslSaaS"></div>
+      </div>
+    </div>
+    <div class="cap">图12 · 项目核心指标交互看板（市场规模 / 出货量 / 区域结构 / 中国渗透率 / 竞品 CR5 / SaaS 占比，数据均来自 projects/viz-esl/data 真实 CSV）</div>
+    <p>基于以上数据，对维界投影中台定位给出五条结论：</p>
+    <p><b>1. 市场大而分散，中立中台有缝隙。</b>全球 CR5 约 93.7%，但单家最高仅 44%（VusionGroup），没有一家能垄断协议栈。中型零售商与下沉市场是中立中台的天然客户。</p>
+    <p><b>2. 增速足够快，值得押注软件层。</b>出货量量级 CAGR 约 31.5%（2021→2025），硬件越铺越多，多品牌混用的运维复杂度会指数上升——这正是软件中台的价值窗口。</p>
+    <p><b>3. 中国市场是增量主战场。</b>2024 商超整体渗透率约 30%，三四线仅 15%，与一二线 60% 之间存在 4 倍落差。维界投影应优先服务三四线连锁与中小商超，避开 Vusion/汉朔已锁定的头部客户。</p>
+    <p><b>4. SaaS 模式被行业验证，但别吹过头。</b>行业龙头 SaaS 占比仅 4%–6%，维界投影自述 70%+ 是差异化目标，对外必须讲清「这是项目定位，不是行业现状」，否则会被面试官一句「Vusion 才 6%」问倒。</p>
+    <p><b>5. 政策是催化剂，不是主驱动力。</b>欧盟 DPP 2027 节点是确定性合规红利，中国政策是间接利好。维界投影应把「多协议适配 + 数据归一化」作为技术主线，把「可核验的店内数字身份」作为对外故事线。</p>
+  </div>
+</div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 奖状数据（六类，46 项）=====
+var AWARDS={
+'国家级':[{n:'第六届全国税务预警精英挑战赛个人赛 · 一等奖',e:'2025',p:'assets/Q1v3bTHoEoPY4GxU43GcdNZwnoc.png',rot:false},{n:'第七届全国税务预警精英挑战赛团体赛 · 一等奖',e:'2026',p:'assets/Mr8vbqCJUod2TSxungNcW99lnsd.png',rot:false},{n:'第十二届东方财富杯全国大学生金融挑战赛 · 全国三等奖',e:'第十二届',p:'assets/CuA5biumfoRzHvx3ly7chsXWnKf.png',rot:false},{n:'第七届衡信杯全国个税精英挑战赛团体赛 · 一等奖',e:'2026',p:'assets/VgXFbWSWHoGxIJxJ9TacXZHPn6c.png',rot:false},{n:'第七届全国大学生税法知识竞赛 · 团体二等奖',e:'2026',p:'assets/Si1ebrR03oS2Uyx3ZX3cbGmGnoe.png',rot:false},{n:'第三届大学生数据要素素质大赛 · 全国三等奖',e:'2026',p:'assets/EwMgbEQ6co8x1ZxfB5uc5lyMnwc.png',rot:false},{n:'第七届华数杯全国大学生数学建模竞赛 · 优秀奖',e:'2026',p:'assets/UzJObAfbLoRiyLxncGwci0umnqq.png',rot:false}],
+'省级':[{n:'广东省大学生创新创业训练计划 · 智药慧普项目 · 省级立项',e:'2026',p:'assets/PVfobQ3QJoEa9qxzVHUcXyi2njd.png',rot:false},{n:'第三届大学生数据要素素质大赛 · 广东赛区一等奖',e:'2026',p:'assets/PycCbTXOuo52f6xnWSvcG0Nsn7b.png',rot:false},{n:'第十二届东方财富杯全国金融挑战赛 · 省赛三等奖',e:'第十二届',p:'assets/PpzwbdCB7obrN9xq8ORcnYIrnRg.png',rot:false},{n:'全国高校数智化企业经营沙盘大赛 · 广东省选拔赛二等奖',e:'2025',p:'assets/KVgxbFVpRo17KuxO7m7cGhfUnmb.png',rot:false},{n:'第十五届挑战杯广东大学生创业计划竞赛 · 铜奖',e:'第十五届',p:'assets/Kypzb1bvzoqdKOxSl9WcDfxjnYw.png',rot:false},{n:'第十六届三创赛 · 四川省省级选拔赛二等奖',e:'第十六届',p:'assets/A1CobWDNKoksLFxXvgvcmFCCnYb.png',rot:false},{n:'广东省大学生数学建模竞赛 · 优胜奖',e:'2025',p:'assets/AvVybd02Yo1ee7xgD3Xcmjf8nle.png',rot:true,s:1}],
+'校级':[{n:'2024-2025学年广州商学院 · 三等奖学金',e:'2024-2025',p:'assets/Dn1CbMc0Coqo3uxJCasciKbPngf.png',rot:false},{n:'第十五届广州商学院挑战杯大学生创业计划竞赛 · MindArt智能画框 三等奖',e:'第十五届',p:'assets/IYdQbUYVHo6FS4xuwZrcvZjOnjd.png',rot:true,s:1},{n:'第十六届市调大赛广州商学院校赛 · 轻享食光队 三等奖',e:'第十六届',p:'assets/OfivbSgrVoGsPfxxFD7cHLPhnrf.png',rot:false},{n:'第十六届三创赛西南科技大学校级赛 · 三小创老吃家队 二等奖',e:'第十六届',p:'assets/SBckbqKpToegegx6Tkqc56hsnRd.png',rot:false},{n:'第十三届广州商学院职业规划大赛成长赛道 · 铜奖',e:'第十三届',p:'assets/WXU3bEWRhoQ3SnxlCQ1cexI4nXv.png',rot:false},{n:'第九届广州商学院社团文化节ERP沙盘比赛 · 对对队 三等奖',e:'第九届',p:'assets/H1C4bujSaoSOjfxQ50scsXAVnAb.png',rot:false},{n:'广州商学院数字经济产业学院模拟直播大赛 · 赚够一百亿队 一等奖',e:'2025',p:'assets/ZDRRbsjnxoyPGWxFbmzcIUxLnlN.png',rot:false},{n:'第十六届三创赛广州商学院校赛 · 融创农科队 一等奖',e:'第十六届',p:'assets/O2uJbbmjdohyf7xJ2nHcswNhnmg.png',rot:false},{n:'第十六届三创赛广州商学院校赛 · 融创农科队 最佳创新奖',e:'第十六届',p:'assets/I9JibjQxAoklv6xXoVPcaIyYndX.png',rot:false},{n:'第十六届三创赛广州商学院校赛 · 融创农科队 最佳创意奖',e:'第十六届',p:'assets/EcCfbd57QoSk6xxqkLdcONT3nKd.png',rot:false},{n:'第十三届学创杯广州商学院校赛数字营销赛道 · 稳赚不赔队 三等奖',e:'第十三届',p:'assets/NkyubQS2DoU8l2xGO6OcDEIpnth.png',rot:false},{n:'第十五届三创赛广州商学院校级赛 · 沃土云耕先锋队 二等奖',e:'第十五届',p:'assets/CFmab4G2Uo6YEXx8IMhcoBeanOd.png',rot:false},{n:'广州商学院数字经济产业学院数字经济知识竞赛决赛 · 一等奖',e:'2025',p:'assets/Y5lobDYBNoHH9IxvcEVcQHb5nSx.png',rot:false},{n:'第七届土地国情调查大赛广州商学院校赛 · 城中菜园探研队 三等奖',e:'第七届',p:'assets/K8PQbuuNso6lXkxqJmgcURoRnRh.png',rot:false},{n:'第十届广州商学院社团文化节创新创业策划大赛 · 食验家队 三等奖',e:'第十届',p:'assets/YvJ9bKC0WoCYsYxs08Ec8guvnEc.png',rot:false},{n:'2026广州商学院优秀学子寒假母校行 · 湛江第四中学 优秀奖',e:'2026',p:'assets/JMJabnr5do69hIxSKXkclRwgn8c.png',rot:false}],
+'院级':[{n:'广州商学院数字经济产业学院模拟政协提案大赛 · 第一组 三等奖',e:'2025',p:'assets/IYyLbfnn0oGEV0x7DLac4JJvnr8.png',rot:false},{n:'2026广东省科技创新战略专项资金 · 电子价签通信中台项目 · 校级立项',e:'2026',p:'assets/Vor0b6DlyourLhxzSZ4cWpxYnEh.png',rot:false},{n:'数字经济产业学院主题团日设计大赛初赛 · 24级大数据二团支部 三等奖',e:'2025',p:'assets/Qh5ZbSbUDodeQHxgv8vcrRZin2g.png',rot:true,s:1},{n:'外国语学院2026攀登计划项目申报 · 莨物新生 一等奖',e:'2026',p:'assets/ViZIbqZcaouxVZxuMkycTjbhnyb.png',rot:true},{n:'数字经济产业学院课室卫生清洁评比 · 大数据2402班 三等奖',e:'2025',p:'assets/TElmbVSykolQ4YxaHpNcc86qn8e.png',rot:false},{n:'院级五四评优 · 先进团支部成员',e:'2025',p:'assets/qiARBzjMhb.png',rot:false}],
+'版权登记':[{n:'计算机软件著作权登记 · 基于RFID与RTLS的商品全生命周期追踪系统 V1.0 (登记号2026SR0819724)',e:'2026',p:'assets/OstPb8YgFokM1MxSztXclf1pnQh.png',rot:false},{n:'计算机软件著作权登记 · 面向智慧零售的多品牌电子价签全生命周期业务调度系统 V1.0 (登记号2026SR0819704)',e:'2026',p:'assets/Et83beKuBo6cxjxR4szcxEUEnxg.png',rot:false}],
+'证书':[{n:'广州商学院校园宣传大使 · 聘任证书',e:'2026',p:'assets/WWbHbsF5ro36W1xhOs6cxvt7nhE.png',rot:false},{n:'广州商学院×马克图布校企合作电商实训项目 · 直播运营 项目证书',e:'2025',p:'assets/K8vsbmueYoU3qMx27Y1chg3nn9e.png',rot:false},{n:'内容星球短视频直播实践 · 优秀直播人才 荣誉证书',e:'2025',p:'assets/VXzUbvtwhoG89Rx8zQMcFICVnFg.png',rot:false},{n:'广州商学院×内容星球直播-短视频实训项目 · 结业证书',e:'2025',p:'assets/NVkXbkT0poDkZnxStaBcRs2knbj.png',rot:false},{n:'全国计算机水平考试一级(WPS Office) · 合格证书',e:'2024.12',p:'assets/U9ZlbJEcioSc4Cxs877cuVT5nzh.png',rot:false},{n:'全国计算机等级考试二级(Python) · 合格证书',e:'2026.3',p:'assets/DmLHbkKAAoqFdYx56WScvXUAnmh.png',rot:false},{n:'普通话水平测试 · 等级证书',e:'2024',p:'assets/Bss6bWIKzo5ewhxudrXcUhCOnFc.png',rot:false},{n:'全国大学英语四级(CET-4) · 成绩报告单',e:'2025.12',p:'assets/CyWNb1AjuoafPBxZeElcMzGFnk5.png',rot:false}]
+};
+// ===== 奖状弹窗 =====
+var modal=document.getElementById('modal'),modalTitle=document.getElementById('modalTitle'),modalBody=document.getElementById('modalBody'),modalBox=document.getElementById('modalBox');
+function openLight(src,cap,rot){
+  var lb=document.getElementById('lightbox');
+  if(!src)return;
+  var img=document.getElementById('lightboxImg');
+  img.src=src;
+  img.style.display='block';
+  if(rot){img.classList.add('rot-img')}else{img.classList.remove('rot-img')}
+  document.getElementById('lightboxCap').textContent=cap;
+  lb.classList.add('open');
+  if(!lb._bound){lb._bound=1;lb.addEventListener('click',function(e){if(e.target.closest('.lb-close')){this.classList.remove('open');return}if(e.target===this)this.classList.remove('open')})}
+}
+function openModal(lv){
+  modalTitle.textContent=lv+' · '+AWARDS[lv].length+' 项';
+  modalBody.innerHTML='<div class="photo-grid">'+AWARDS[lv].map(function(a){
+    var ph=a.p?('<div class="frame"><img class="'+(a.rot?'rot-img':'')+'" src="'+a.p+'" alt="" loading="lazy"></div>'):'<div class="noimg">照片待补充</div>';
+    var cap=(a.n+' · '+a.e).replace(/'/g,'');
+    var cardCls='photo-card'+(a.s?' s-card':'');
+    return '<div class="'+cardCls+'" data-src="'+(a.p||'')+'" data-cap="'+cap+'" data-rot="'+(a.rot?1:0)+'" '+(a.p?'':'style="cursor:default"')+'>'+ph+'<div class="t"><div class="t-e">'+a.e+'</div><div class="t-n">'+a.n+'</div></div></div>';
+  }).join('')+'</div>';
+  modal.classList.add('open');
+  modalBody.querySelectorAll('.photo-card').forEach(function(c){c.addEventListener('click',function(){openLight(c.getAttribute('data-src'),c.getAttribute('data-cap'),c.getAttribute('data-rot')==='1')})});
+}
+function closeModal(){modal.classList.remove('open')}
+document.querySelectorAll('#awards .stat').forEach(function(s){s.addEventListener('click',function(){openModal(s.getAttribute('data-level'))})});
+modal.addEventListener('click',function(e){if(e.target===modal)closeModal()});
+
+// ===== 作品详情页 =====
+var detail=document.getElementById('detail');
+document.querySelectorAll('.proj').forEach(function(p){p.addEventListener('click',function(){
+  var k=p.getAttribute('data-proj');
+  detail.querySelectorAll('[data-proj]').forEach(function(d){d.style.display=(d.getAttribute('data-proj')===k)?'block':'none'});
+  detail.classList.add('open');detail.scrollTop=0;
+  // 在最后一个 secbox 后追加底部返回按钮
+  var block=detail.querySelector('[data-proj="'+k+'"]');
+  block.querySelectorAll('.detail-back-bottom').forEach(function(b){b.remove()});
+  var bb=document.createElement('div');bb.style.textAlign='center';
+  bb.innerHTML='<button class="detail-back-bottom" onclick="closeDetail()">← 返回作品集</button>';
+  block.appendChild(bb);
+  // 构建左侧竖向导览（列出该作品全部 secbox 标题，点击平滑滚动）
+  __buildDetailSide(k,block);
+  // 招聘项目看板
+  if(k==='recruit'){setTimeout(function(){if(window.__initRecruitDash)window.__initRecruitDash();},120);}
+  // ESL 项目交互式看板
+  if(k==='esl'){setTimeout(function(){if(window.__initEslDash)window.__initEslDash();},120);}
+})});
+function closeDetail(){detail.classList.remove('open')}
+// 作品详情页左侧导览：按 secbox 标题生成锚点
+var __sideLinks=[];
+function __buildDetailSide(k,block){
+  var side=document.getElementById('detailSide');if(!side)return;
+  side.innerHTML='';__sideLinks=[];
+  var heads=block.querySelectorAll('.secbox h2');
+  heads.forEach(function(h,i){
+    var sb=h.parentElement;
+    if(!sb.id)sb.id='sb-'+k+'-'+i;
+    var a=document.createElement('a');
+    a.href='javascript:void(0)';
+    a.textContent=h.textContent.trim();
+    a.setAttribute('data-tid',sb.id);
+    a.addEventListener('click',function(){
+      detail.querySelector('#'+sb.id).scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    side.appendChild(a);
+    __sideLinks.push(a);
+  });
+}
+// 滚动高亮当前章节（仅在 detail 打开时生效）
+(function(){
+  var side=document.getElementById('detailSide');
+  if(!side)return;
+  detail.addEventListener('scroll',function(){
+    if(!detail.classList.contains('open'))return;
+    var vis=detail.querySelectorAll('.secbox');
+    var cur=null;
+    vis.forEach(function(s){var r=s.getBoundingClientRect();if(r.top<140)cur=s.id});
+    side.querySelectorAll('a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-tid')===cur)});
+  },{passive:true});
+})();
+
+// ===== 招聘项目 ECharts 交互看板（真实数据 · Top10行业×Top10城市交叉表）=====
+// 数据来源：recruitment_data_cleaned.csv（323,818 条）实算；全局学历/薪资分布已与现有 DASH_DATA 对齐
+var DASH_CROSS = {
+  indNames: ["软件和信息技术服务业","计算机通信电子设备制造业","电气机械和器材制造业","医药制造业","房地产业","专用设备制造业","商务服务业","汽车制造业","零售业","互联网和相关服务"],
+  cityNames: ["北京","上海","深圳","杭州","广州","成都","武汉","南京","苏州","重庆"],
+  eduOrder: ["本科","大专","不限","其他","硕士","博士"],
+  salOrder: ["<3k","3-5k","5-8k","8-10k","10-15k","15-20k","20-30k"],
+  // key: "行业|城市" -> [岗位数, 学历6档, 薪资7档]
+  cross: {"软件和信息技术服务业|北京":[9722,[6715,2048,739,45,171,4],[198,612,1876,937,3066,2167,866]],"软件和信息技术服务业|上海":[4772,[2925,1335,379,61,71,1],[69,278,881,444,1480,1201,419]],"软件和信息技术服务业|深圳":[4367,[2585,1443,257,59,23,0],[38,187,825,473,1539,989,316]],"软件和信息技术服务业|杭州":[3771,[2147,1267,265,47,43,2],[100,372,732,391,1158,797,221]],"软件和信息技术服务业|广州":[2471,[1489,759,177,25,21,0],[64,185,492,265,885,449,131]],"软件和信息技术服务业|成都":[1645,[1090,385,115,29,25,1],[40,117,352,205,555,307,69]],"软件和信息技术服务业|武汉":[1268,[800,335,108,10,15,0],[28,79,252,132,462,238,77]],"软件和信息技术服务业|南京":[1560,[933,484,115,11,17,0],[14,96,281,168,562,332,107]],"软件和信息技术服务业|苏州":[550,[304,167,56,19,4,0],[6,35,110,76,183,120,20]],"软件和信息技术服务业|重庆":[489,[258,182,27,19,2,1],[10,60,134,62,151,57,15]],"计算机通信电子设备制造业|北京":[3471,[2286,575,301,79,224,6],[52,216,766,295,1019,793,330]],"计算机通信电子设备制造业|上海":[1943,[1057,475,215,88,105,3],[32,140,458,174,580,401,158]],"计算机通信电子设备制造业|深圳":[5583,[2616,1937,397,564,64,5],[79,585,1618,616,1444,901,340]],"计算机通信电子设备制造业|杭州":[1687,[1124,311,145,65,41,1],[38,155,329,151,544,341,129]],"计算机通信电子设备制造业|广州":[1552,[806,448,145,106,41,6],[20,169,391,126,481,274,91]],"计算机通信电子设备制造业|成都":[1400,[637,252,120,339,47,5],[27,400,350,129,265,162,67]],"计算机通信电子设备制造业|武汉":[1871,[1074,313,290,115,74,5],[47,270,572,181,514,231,56]],"计算机通信电子设备制造业|南京":[792,[459,153,92,52,36,0],[16,113,187,68,231,135,42]],"计算机通信电子设备制造业|苏州":[2049,[863,602,239,311,30,4],[18,257,665,174,538,286,111]],"计算机通信电子设备制造业|重庆":[522,[234,140,91,52,5,0],[11,138,165,45,117,35,11]],"电气机械和器材制造业|北京":[904,[548,193,113,22,28,0],[10,67,237,83,232,221,54]],"电气机械和器材制造业|上海":[1372,[732,385,161,68,25,1],[19,115,424,102,398,234,80]],"电气机械和器材制造业|深圳":[1906,[986,594,158,147,19,2],[17,170,554,217,478,329,141]],"电气机械和器材制造业|杭州":[799,[470,211,72,31,15,0],[13,60,267,77,208,135,39]],"电气机械和器材制造业|广州":[634,[311,175,67,66,14,1],[8,80,243,45,138,86,34]],"电气机械和器材制造业|成都":[406,[193,142,32,31,8,0],[12,64,144,40,92,42,12]],"电气机械和器材制造业|武汉":[419,[172,106,64,66,11,0],[12,131,141,24,66,28,17]],"电气机械和器材制造业|南京":[454,[263,116,43,20,12,0],[5,50,130,34,129,79,27]],"电气机械和器材制造业|苏州":[903,[458,248,88,95,14,0],[3,88,236,111,275,137,53]],"电气机械和器材制造业|重庆":[268,[119,98,18,28,5,0],[1,60,91,35,52,22,7]],"医药制造业|北京":[1397,[633,416,149,57,123,19],[30,163,477,156,338,157,76]],"医药制造业|上海":[1158,[554,320,104,69,101,10],[23,112,337,100,330,173,83]],"医药制造业|深圳":[575,[282,194,29,34,32,4],[9,71,171,57,157,82,28]],"医药制造业|杭州":[661,[258,254,59,57,31,2],[19,109,228,71,135,71,28]],"医药制造业|广州":[830,[359,276,87,60,45,3],[42,105,294,74,193,92,30]],"医药制造业|成都":[624,[270,214,47,43,42,8],[28,119,206,70,127,50,24]],"医药制造业|武汉":[499,[149,216,44,50,39,1],[23,133,179,43,87,20,14]],"医药制造业|南京":[459,[196,168,36,14,40,5],[9,73,143,49,125,42,18]],"医药制造业|苏州":[240,[114,75,17,18,13,3],[6,29,88,18,74,17,8]],"医药制造业|重庆":[478,[179,205,34,45,13,2],[23,111,182,48,83,22,9]],"房地产业|北京":[1567,[394,377,304,465,27,0],[32,165,462,117,491,237,63]],"房地产业|上海":[1108,[435,292,197,166,17,1],[27,148,362,99,232,148,92]],"房地产业|深圳":[1101,[558,277,133,123,10,0],[27,127,327,100,251,193,76]],"房地产业|杭州":[813,[311,268,110,117,7,0],[14,155,247,56,185,101,55]],"房地产业|广州":[650,[303,187,87,66,7,0],[13,90,187,62,152,93,53]],"房地产业|成都":[472,[198,151,65,53,5,0],[41,95,138,29,95,52,22]],"房地产业|武汉":[608,[229,184,110,82,3,0],[39,163,164,34,113,63,32]],"房地产业|南京":[416,[185,123,65,40,3,0],[14,80,133,39,79,49,22]],"房地产业|苏州":[354,[158,113,43,38,2,0],[5,52,113,32,88,42,22]],"房地产业|重庆":[655,[283,206,77,86,3,0],[44,162,172,40,151,65,21]],"专用设备制造业|北京":[735,[417,166,71,28,48,5],[15,62,220,83,196,101,58]],"专用设备制造业|上海":[980,[478,279,93,82,45,3],[13,95,291,87,268,161,65]],"专用设备制造业|深圳":[1571,[727,500,112,196,32,4],[14,158,479,150,416,263,91]],"专用设备制造业|杭州":[383,[230,100,17,27,8,1],[1,33,122,40,108,54,25]],"专用设备制造业|广州":[493,[217,161,55,47,12,1],[10,67,176,60,115,41,24]],"专用设备制造业|成都":[237,[114,83,22,13,4,1],[8,44,70,32,57,16,10]],"专用设备制造业|武汉":[328,[169,92,21,22,24,0],[5,53,94,34,90,37,15]],"专用设备制造业|南京":[290,[172,75,14,19,8,2],[7,31,65,31,99,34,23]],"专用设备制造业|苏州":[689,[304,210,55,89,31,0],[5,66,211,80,173,115,39]],"专用设备制造业|重庆":[190,[100,55,9,17,7,2],[8,25,62,22,48,16,9]],"商务服务业|北京":[2235,[1018,778,293,116,30,0],[60,265,736,274,530,261,109]],"商务服务业|上海":[2105,[956,749,294,86,18,2],[90,217,640,216,504,283,155]],"商务服务业|深圳":[940,[398,360,94,75,13,0],[14,94,260,115,246,154,57]],"商务服务业|杭州":[789,[358,303,102,23,3,0],[30,103,252,76,223,75,30]],"商务服务业|广州":[815,[408,286,88,32,1,0],[51,113,241,82,179,104,45]],"商务服务业|成都":[203,[82,84,9,27,1,0],[6,43,75,19,38,11,11]],"商务服务业|武汉":[155,[72,57,10,15,1,0],[6,34,39,13,40,18,5]],"商务服务业|南京":[213,[96,73,27,16,1,0],[6,38,59,23,49,28,10]],"商务服务业|苏州":[149,[68,41,23,16,1,0],[4,26,39,26,31,13,10]],"商务服务业|重庆":[208,[64,89,30,25,0,0],[16,65,67,18,29,11,2]],"汽车制造业|北京":[455,[297,82,32,18,26,0],[6,33,78,42,135,124,37]],"汽车制造业|上海":[1019,[574,218,120,84,20,3],[19,90,268,91,292,169,90]],"汽车制造业|深圳":[759,[325,136,235,47,16,0],[7,40,308,73,186,106,39]],"汽车制造业|杭州":[367,[170,137,41,17,2,0],[7,46,107,34,80,58,35]],"汽车制造业|广州":[475,[208,152,61,53,1,0],[11,53,149,51,112,78,21]],"汽车制造业|成都":[140,[57,48,17,17,1,0],[5,24,49,23,25,8,6]],"汽车制造业|武汉":[565,[418,68,35,36,8,0],[6,73,90,39,126,85,146]],"汽车制造业|南京":[285,[122,71,44,35,13,0],[5,53,95,28,49,37,18]],"汽车制造业|苏州":[247,[101,70,26,47,3,0],[3,17,95,32,66,26,8]],"汽车制造业|重庆":[796,[473,178,52,79,13,1],[22,153,236,99,177,91,18]],"零售业|北京":[853,[351,251,146,82,21,2],[27,118,274,93,174,118,49]],"零售业|上海":[1109,[396,408,150,143,12,0],[32,199,362,96,234,141,45]],"零售业|深圳":[1070,[379,520,100,69,2,0],[17,92,404,121,217,153,66]],"零售业|杭州":[481,[171,192,40,59,19,0],[16,99,166,45,94,45,16]],"零售业|广州":[313,[134,78,37,61,3,0],[17,81,111,22,47,22,13]],"零售业|成都":[281,[88,104,41,44,4,0],[22,87,82,16,41,26,7]],"零售业|武汉":[379,[145,112,65,55,2,0],[26,97,124,23,68,31,10]],"零售业|南京":[755,[412,205,75,51,12,0],[23,109,164,64,209,148,38]],"零售业|苏州":[124,[18,59,21,26,0,0],[5,52,39,10,11,5,2]],"零售业|重庆":[481,[111,215,48,100,6,1],[58,147,148,27,59,32,10]],"互联网和相关服务|北京":[3214,[2108,651,390,24,41,0],[102,222,571,347,812,749,411]],"互联网和相关服务|上海":[1830,[884,494,376,62,13,1],[42,107,373,136,507,449,216]],"互联网和相关服务|深圳":[830,[453,262,102,8,5,0],[3,51,138,76,255,214,93]],"互联网和相关服务|杭州":[1421,[789,439,170,11,12,0],[24,108,303,122,402,337,125]],"互联网和相关服务|广州":[851,[421,325,91,11,3,0],[12,74,208,98,250,158,51]],"互联网和相关服务|成都":[474,[204,172,89,9,0,0],[21,67,111,43,133,82,17]],"互联网和相关服务|武汉":[304,[139,92,71,1,1,0],[8,37,84,33,103,35,4]],"互联网和相关服务|南京":[262,[157,66,26,2,11,0],[29,35,81,31,69,14,3]],"互联网和相关服务|苏州":[132,[66,34,25,5,2,0],[1,12,40,15,35,18,11]],"互联网和相关服务|重庆":[82,[18,23,35,6,0,0],[6,24,23,8,14,7,0]]}
+};
+var __dashInstances = null;
+var __selInd = {}, __selCity = {};
+function __initRecruitDash(){
+  if(!window.echarts){return}
+  if(__dashInstances){
+    Object.keys(__dashInstances).forEach(function(k){try{__dashInstances[k].resize()}catch(e){}});
+    return;
+  }
+  // 默认全选
+  DASH_CROSS.indNames.forEach(function(n){__selInd[n]=true});
+  DASH_CROSS.cityNames.forEach(function(n){__selCity[n]=true});
+  // 构建 chips
+  var indWrap=document.getElementById('dashIndChips');
+  var cityWrap=document.getElementById('dashCityChips');
+  function buildChips(wrap,names,state,key){
+    names.forEach(function(n){
+      var c=document.createElement('div');
+      c.className='dash-chip on';c.textContent=n;c.dataset.key=n;
+      c.addEventListener('click',function(){
+        state[n]=!state[n];
+        c.classList.toggle('on',state[n]);
+        __renderDash();
+      });
+      wrap.appendChild(c);
+    });
+  }
+  buildChips(indWrap,DASH_CROSS.indNames,__selInd,'ind');
+  buildChips(cityWrap,DASH_CROSS.cityNames,__selCity,'city');
+  var indEl=document.getElementById('dashInd');
+  var cityEl=document.getElementById('dashCityChart');
+  var eduEl=document.getElementById('dashEdu');
+  var salEl=document.getElementById('dashSalary');
+  if(!indEl||!cityEl||!eduEl||!salEl)return;
+  var axisColor='rgba(169,182,216,.7)';
+  var splitColor='rgba(152,165,206,.12)';
+  var indChart=echarts.init(indEl);
+  var cityChart=echarts.init(cityEl);
+  var eduChart=echarts.init(eduEl);
+  var salChart=echarts.init(salEl);
+  __dashInstances={ind:indChart,city:cityChart,edu:eduChart,sal:salChart};
+  window.__renderDash=function(){
+    var selInd=DASH_CROSS.indNames.filter(function(n){return __selInd[n]});
+    var selCity=DASH_CROSS.cityNames.filter(function(n){return __selCity[n]});
+    // 行业图：每个选中行业跨选中城市的合计
+    var indTotals=selInd.map(function(ind){
+      var s=0;
+      selCity.forEach(function(city){
+        var row=DASH_CROSS.cross[ind+'|'+city];
+        if(row)s+=row[0];
+      });
+      return [ind,s];
+    });
+    indTotals.sort(function(a,b){return b[1]-a[1]});
+    // 城市图：每个选中城市跨选中行业的合计
+    var cityTotals=selCity.map(function(city){
+      var s=0;
+      selInd.forEach(function(ind){
+        var row=DASH_CROSS.cross[ind+'|'+city];
+        if(row)s+=row[0];
+      });
+      return [city,s];
+    });
+    cityTotals.sort(function(a,b){return b[1]-a[1]});
+    // 学历/薪资：所有选中组合聚合
+    var eduTotals=DASH_CROSS.eduOrder.map(function(){return 0});
+    var salTotals=DASH_CROSS.salOrder.map(function(){return 0});
+    var grandTotal=0;
+    selInd.forEach(function(ind){
+      selCity.forEach(function(city){
+        var row=DASH_CROSS.cross[ind+'|'+city];
+        if(!row)return;
+        grandTotal+=row[0];
+        for(var i=0;i<6;i++)eduTotals[i]+=row[1][i];
+        for(var j=0;j<7;j++)salTotals[j]+=row[2][j];
+      });
+    });
+    // KPI
+    var kpi=document.getElementById('dashKPI');
+    if(kpi)kpi.innerHTML='当前筛选：<b>'+selInd.length+'</b> 个行业 × <b>'+selCity.length+'</b> 个城市 · <b>'+grandTotal.toLocaleString()+'</b> 条岗位';
+    // 行业图
+    indChart.setOption({
+      backgroundColor:'transparent',
+      title:{text:'行业招聘量（Top10 行业内跨所选城市）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+      grid:{left:10,right:20,top:36,bottom:24,containLabel:true},
+      xAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+      yAxis:{type:'category',data:indTotals.map(function(d){return d[0]}).reverse(),axisLabel:{color:axisColor,fontSize:10}},
+      series:[{type:'bar',data:indTotals.map(function(d){return d[1]}).reverse(),itemStyle:{color:new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#3B82F6'},{offset:1,color:'#FFB84D'}])},barWidth:14}]
+    });
+    // 城市图
+    cityChart.setOption({
+      backgroundColor:'transparent',
+      title:{text:'城市招聘量（Top10 城市内跨所选行业）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+      grid:{left:10,right:20,top:36,bottom:24,containLabel:true},
+      xAxis:{type:'category',data:cityTotals.map(function(d){return d[0]}),axisLabel:{color:axisColor,fontSize:10,rotate:30}},
+      yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+      series:[{type:'bar',data:cityTotals.map(function(d){return d[1]}),itemStyle:{color:'#FF6B6B'},barWidth:14}]
+    });
+    // 学历图
+    eduChart.setOption({
+      backgroundColor:'transparent',
+      title:{text:'学历要求分布',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+      tooltip:{trigger:'item'},
+      legend:{bottom:0,textStyle:{color:axisColor,fontSize:10},itemWidth:10,itemHeight:10},
+      series:[{type:'pie',radius:['38%','62%'],center:['50%','50%'],data:DASH_CROSS.eduOrder.map(function(n,i){return{name:n,value:eduTotals[i]}}),label:{color:axisColor,fontSize:10},itemStyle:{borderColor:'#0a0e2a',borderWidth:2}}]
+    });
+    // 薪资图
+    salChart.setOption({
+      backgroundColor:'transparent',
+      title:{text:'平均月薪分布',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+      grid:{left:10,right:20,top:36,bottom:24,containLabel:true},
+      xAxis:{type:'category',data:DASH_CROSS.salOrder,axisLabel:{color:axisColor,fontSize:10}},
+      yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+      series:[{type:'bar',data:salTotals,itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#FFB84D'},{offset:1,color:'#FF6B6B'}])},barWidth:18}]
+    });
+  };
+  window.__renderDash();
+  window.addEventListener('resize',function(){Object.keys(__dashInstances).forEach(function(k){try{__dashInstances[k].resize()}catch(e){}})});
+}
+window.__initRecruitDash=__initRecruitDash;
+
+// ===== ESL 项目 ECharts 交互看板（真实数据：projects/viz-esl/data 内联）=====
+// 市场规模 2025（十亿美元，6 家机构并存）
+var ESL_MKT=[
+  {name:'Global Market Insights',v:2.8},
+  {name:'Grand View Research',v:2.1},
+  {name:'Mordor Intelligence',v:1.97},
+  {name:'The Business Research Co.',v:1.52},
+  {name:'Straits Research',v:1.76},
+  {name:'Research and Markets',v:3.1}
+];
+// 出货量（亿片，跨机构口径）
+var ESL_SHIP={
+  'CINNO（汉朔招股书）':{2021:1.67,2022:2.83,2023:3.02},
+  'ePaperInsight':{2024:3.7,2025:5.0},
+  '元太科技（转述）':{2024:3.4},
+  '洛图科技RUNTO':{2025:5.4,2026:1.7}
+};
+// 区域收入占比（%，多机构并存）
+var ESL_REGION={
+  'GMI':{欧洲:32.0,北美:null,亚太:null},
+  'Polaris':{欧洲:40.1,北美:null,亚太:null},
+  'PW Consulting':{欧洲:39.42,北美:36.35,亚太:null},
+  'Dataintelo':{欧洲:28.7,北美:19.2,亚太:42.3}
+};
+var __eslInstances=null,__selMkt={},__selShip={};
+function __initEslDash(){
+  if(!window.echarts)return;
+  if(__eslInstances){
+    Object.keys(__eslInstances).forEach(function(k){try{__eslInstances[k].resize()}catch(e){}});
+    return;
+  }
+  ESL_MKT.forEach(function(m){__selMkt[m.name]=true});
+  Object.keys(ESL_SHIP).forEach(function(s){__selShip[s]=true});
+  var axisColor='rgba(169,182,216,.7)',splitColor='rgba(152,165,206,.12)';
+  // chips：市场规模机构
+  var mktWrap=document.getElementById('eslMktChips');
+  ESL_MKT.forEach(function(m){
+    var c=document.createElement('div');
+    c.className='dash-chip on';c.textContent=m.name;c.dataset.k=m.name;
+    c.addEventListener('click',function(){__selMkt[m.name]=!__selMkt[m.name];c.classList.toggle('on',__selMkt[m.name]);__renderEsl();});
+    mktWrap.appendChild(c);
+  });
+  // chips：出货量来源
+  var shipWrap=document.getElementById('eslShipChips');
+  Object.keys(ESL_SHIP).forEach(function(s){
+    var c=document.createElement('div');
+    c.className='dash-chip on';c.textContent=s;c.dataset.k=s;
+    c.addEventListener('click',function(){__selShip[s]=!__selShip[s];c.classList.toggle('on',__selShip[s]);__renderEsl();});
+    shipWrap.appendChild(c);
+  });
+  var elIds=['eslMktSize','eslShip','eslRegion','eslPenet','eslComp','eslSaaS'];
+  var els={};elIds.forEach(function(id){var el=document.getElementById(id);if(el)els[id]=echarts.init(el)});
+  __eslInstances=els;
+  window.__renderEsl=function(){
+    var selMkt=ESL_MKT.filter(function(m){return __selMkt[m.name]});
+    var selShip=Object.keys(ESL_SHIP).filter(function(s){return __selShip[s]});
+    // KPI
+    var kpi=document.getElementById('eslKPI');
+    if(kpi){
+      var vals=selMkt.map(function(m){return m.v});
+      var mean=vals.length?(vals.reduce(function(a,b){return a+b},0)/vals.length):0;
+      var lo=vals.length?Math.min.apply(null,vals):0,hi=vals.length?Math.max.apply(null,vals):0;
+      kpi.innerHTML='已选 <b>'+selMkt.length+'/'+ESL_MKT.length+'</b> 家机构 · 2025 全球市场均值 <b>'+mean.toFixed(2)+'</b> 十亿美元（区间 '+lo.toFixed(2)+'–'+hi.toFixed(2)+'）｜ 出货量量级 CAGR（2021→2025）约 <b>31.5%</b>｜ 全球 CR5 <b>93.7%</b>｜ 行业龙头 SaaS 占比 <b>4%–6%</b>';
+    }
+    // 市场规模图（横向条形）
+    if(els.eslMktSize)els.eslMktSize.setOption({
+      backgroundColor:'transparent',
+      title:{text:'2025 全球 ESL 市场规模 · 多机构口径（十亿美元）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+      grid:{left:10,right:30,top:36,bottom:20,containLabel:true},
+      xAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+      yAxis:{type:'category',data:selMkt.map(function(m){return m.name}).reverse(),axisLabel:{color:axisColor,fontSize:10}},
+      series:[{type:'bar',data:selMkt.map(function(m){return m.v}).reverse(),barWidth:14,itemStyle:{color:new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#3B82F6'},{offset:1,color:'#FFB84D'}])},label:{show:true,position:'right',color:'#FFF4E0',fontSize:10,formatter:'{c}'}}]
+    });
+    // 出货量图（折线，多源）
+    if(els.eslShip){
+      var years=['2021','2022','2023','2024','2025','2026H1'];
+      var series=selShip.map(function(s){
+        var d=ESL_SHIP[s];
+        return {name:s,type:'line',smooth:true,symbolSize:7,data:years.map(function(y){
+          var key=y==='2026H1'?'2026':y;
+          return (d[key]!=null)?d[key]:null;
+        })};
+      });
+      els.eslShip.setOption({
+        backgroundColor:'transparent',
+        title:{text:'全球 ESL 出货量趋势（亿片，跨机构口径）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+        grid:{left:10,right:20,top:40,bottom:24,containLabel:true},
+        legend:{bottom:0,textStyle:{color:axisColor,fontSize:9},itemWidth:10,itemHeight:8},
+        xAxis:{type:'category',data:years,axisLabel:{color:axisColor,fontSize:10}},
+        yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+        series:series
+      });
+    }
+    // 区域结构图
+    if(els.eslRegion){
+      var regs=['欧洲','北美','亚太'];
+      var agencies=Object.keys(ESL_REGION);
+      els.eslRegion.setOption({
+        backgroundColor:'transparent',
+        title:{text:'2025 区域收入占比（%，多机构口径）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+        grid:{left:10,right:20,top:40,bottom:30,containLabel:true},
+        legend:{bottom:0,textStyle:{color:axisColor,fontSize:9},itemWidth:10,itemHeight:8},
+        xAxis:{type:'category',data:regs,axisLabel:{color:axisColor,fontSize:10}},
+        yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+        series:agencies.map(function(a){
+          return {name:a,type:'bar',barWidth:10,data:regs.map(function(r){return ESL_REGION[a][r]})};
+        })
+      });
+    }
+    // 中国渗透率
+    if(els.eslPenet){
+      var pData=[{name:'中国商超 2020',v:5},{name:'中国商超 2024',v:30},{name:'一二线商超 2024',v:60},{name:'三四线 2024',v:15},{name:'欧美 2025',v:30}];
+      els.eslPenet.setOption({
+        backgroundColor:'transparent',
+        title:{text:'ESL 渗透率对比（%）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+        grid:{left:10,right:20,top:36,bottom:40,containLabel:true},
+        xAxis:{type:'category',data:pData.map(function(d){return d.name}),axisLabel:{color:axisColor,fontSize:9,rotate:28}},
+        yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+        series:[{type:'bar',data:pData.map(function(d){return d.v}),barWidth:16,itemStyle:{color:'#FF6B6B'},label:{show:true,position:'top',color:'#FFF4E0',fontSize:10,formatter:'{c}%'}}]
+      });
+    }
+    // 竞品市占
+    if(els.eslComp){
+      var compData=[{name:'VusionGroup',v:44.0,scope:'2024全球'},{name:'汉朔科技',v:28.0,scope:'2023全球'},{name:'SOLUM',v:12.3,scope:'2025全球'},{name:'汉朔(中国)',v:62.0,scope:'2023中国'}];
+      els.eslComp.setOption({
+        backgroundColor:'transparent',
+        title:{text:'主要竞品市占率（%，跨年份口径，CR5=93.7%）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+        grid:{left:10,right:20,top:36,bottom:24,containLabel:true},
+        xAxis:{type:'category',data:compData.map(function(d){return d.name}),axisLabel:{color:axisColor,fontSize:9,rotate:18}},
+        yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+        series:[{type:'bar',data:compData.map(function(d){return d.v}),barWidth:18,itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#FFB84D'},{offset:1,color:'#FF6B6B'}])},label:{show:true,position:'top',color:'#FFF4E0',fontSize:10,formatter:'{c}%'}}]
+      });
+    }
+    // SaaS 占比
+    if(els.eslSaaS){
+      var saas=[{name:'汉朔科技',v:4.33},{name:'VusionGroup',v:6.0},{name:'维界投影(目标)',v:70.0}];
+      els.eslSaaS.setOption({
+        backgroundColor:'transparent',
+        title:{text:'SaaS / 服务收入占比（%）',textStyle:{color:'#FFF4E0',fontSize:13},left:8,top:4},
+        grid:{left:10,right:20,top:36,bottom:24,containLabel:true},
+        xAxis:{type:'category',data:saas.map(function(d){return d.name}),axisLabel:{color:axisColor,fontSize:9,rotate:12}},
+        yAxis:{type:'value',axisLabel:{color:axisColor,fontSize:10},splitLine:{lineStyle:{color:splitColor}}},
+        series:[{type:'bar',data:saas.map(function(d){return d.v}),barWidth:20,itemStyle:{color:'#3B82F6'},label:{show:true,position:'top',color:'#FFF4E0',fontSize:10,formatter:'{c}%'}}]
+      });
+    }
+  };
+  window.__renderEsl();
+  window.addEventListener('resize',function(){Object.keys(__eslInstances).forEach(function(k){try{__eslInstances[k].resize()}catch(e){}})});
+}
+window.__initEslDash=__initEslDash;
+
+// ===== 3D 地球自转 · 太阳环绕（右上角）=====
+(function(){
+  var host=document.getElementById('bg3d');
+  if(!window.THREE)return;
+  var W=host.clientWidth||innerWidth,H=host.clientHeight||innerHeight;
+  var scene=new THREE.Scene();
+  var _asp=W/H;var camera=new THREE.OrthographicCamera(-7.6*_asp,7.6*_asp,7.6,-7.6,.1,200);camera.position.set(0,7.5,10);camera.lookAt(0,0,0);
+  var renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});
+  renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  host.appendChild(renderer.domElement);
+  var master=new THREE.Group();scene.add(master);master.position.set(4.4,3.0,-1.6);
+  // 中央纯蓝正圆球体（无纹理、无大气、无明暗面）
+  var earth=new THREE.Mesh(new THREE.SphereGeometry(.95,48,48),new THREE.MeshBasicMaterial({color:'#3B82F6'}));
+  master.add(earth);
+  // 光照：环境光 + 跟随太阳位置的方向光（球体均为 BasicMaterial，不受光照影响，仅作氛围）
+  master.add(new THREE.AmbientLight(0x8899bb,.55));
+  var sunLight=new THREE.DirectionalLight(0xfff2d0,1.3);master.add(sunLight);
+  function makeGlow(color,size){var c=document.createElement('canvas');c.width=c.height=128;var g=c.getContext('2d');var grad=g.createRadialGradient(64,64,0,64,64,64);grad.addColorStop(0,color+'ff');grad.addColorStop(.45,color+'66');grad.addColorStop(1,color+'00');g.fillStyle=grad;g.fillRect(0,0,128,128);var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));sp.scale.set(size,size,1);return sp;}
+  master.add(makeGlow('#3B82F6',3.4));
+  var sun=new THREE.Mesh(new THREE.SphereGeometry(.34,36,36),new THREE.MeshBasicMaterial({color:'#FFB84D'}));
+  var sunGroup=new THREE.Group();sunGroup.add(sun);sunGroup.add(makeGlow('#FFB84D',2.4));master.add(sunGroup);
+  var ringMat=new THREE.MeshBasicMaterial({color:'#B9C7FF',transparent:true,opacity:.45});
+  function ring(r){var m=new THREE.Mesh(new THREE.TorusGeometry(r,.014,8,160),ringMat);m.rotation.x=Math.PI/2;master.add(m);}
+  ring(3.7);ring(2.3);ring(5.2);
+  // 红 / 蓝小球：各包一层 Group，带柔和光晕
+  var moon1=new THREE.Mesh(new THREE.SphereGeometry(.13,24,24),new THREE.MeshBasicMaterial({color:'#FF6B6B'}));
+  var m1g=new THREE.Group();m1g.add(moon1);m1g.add(makeGlow('#FF6B6B',0.9));master.add(m1g);
+  var moon2=new THREE.Mesh(new THREE.SphereGeometry(.19,26,26),new THREE.MeshBasicMaterial({color:'#22D3EE'}));
+  var m2g=new THREE.Group();m2g.add(moon2);m2g.add(makeGlow('#22D3EE',1.2));master.add(m2g);
+  var sN=700,sP=new Float32Array(sN*3);
+  for(var j=0;j<sN;j++){sP[j*3]=(Math.random()-.5)*80;sP[j*3+1]=(Math.random()-.5)*80;sP[j*3+2]=(Math.random()-.5)*80-20;}
+  var sGeo=new THREE.BufferGeometry();sGeo.setAttribute('position',new THREE.BufferAttribute(sP,3));
+  scene.add(new THREE.Points(sGeo,new THREE.PointsMaterial({size:.05,color:'#FFF4E0',transparent:true,opacity:.65})));
+  var tx=0,ty=0;
+  window.addEventListener('mousemove',function(e){tx=(e.clientX/W-.5);ty=(e.clientY/H-.5)});
+  var sunAng=0,m1Ang=1.2,m2Ang=2.4;
+  function loop(){
+    sunAng+=.0022;m1Ang+=.0017;m2Ang+=.0012;
+    sunGroup.position.set(3.7*Math.cos(sunAng),0,3.7*Math.sin(sunAng));
+    sunLight.position.copy(sunGroup.position);
+    sun.rotation.y+=.003;
+    m1g.position.set(2.3*Math.cos(m1Ang),0,2.3*Math.sin(m1Ang));
+    m2g.position.set(5.2*Math.cos(m2Ang),0,5.2*Math.sin(m2Ang));
+    earth.rotation.y+=.0018;
+    camera.position.x=tx*.6;camera.position.y=7.5-ty*.6;camera.lookAt(0,0,0);
+    renderer.render(scene,camera);requestAnimationFrame(loop);
+  }
+  window.addEventListener('resize',function(){W=host.clientWidth||innerWidth;H=host.clientHeight||innerHeight;var a=W/H;camera.left=-7.6*a;camera.right=7.6*a;camera.top=7.6;camera.bottom=-7.6;camera.updateProjectionMatrix();renderer.setSize(W,H)});
+  loop();
+})();
+
+// ===== 打字机 =====
+(function(){var el=document.getElementById('type'),w=['Aspiring Data Analyst · 用数据讲清事实','Evidence over intuition · 证据优于直觉','严谨 · 洞察 · 实证'],wi=0,ci=0,de=false;
+  function t(){var x=w[wi];el.textContent=x.slice(0,ci)+(de?'':'▋');if(!de){if(ci<x.length){ci++;setTimeout(t,85)}else{de=true;setTimeout(t,1500)}}else{if(ci>0){ci--;setTimeout(t,30)}else{de=false;wi=(wi+1)%w.length;setTimeout(t,320)}}}
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=w[0]}else t();})();
+
+// ===== 数字滚动 =====
+(function(){function rn(el){var t=+el.dataset.t,c=0,s=Math.max(1,Math.ceil(t/50));var iv=setInterval(function(){c+=s;if(c>=t){c=t;clearInterval(iv)}el.textContent=c.toLocaleString()},18)}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){rn(e.target);io.unobserve(e.target)}})},{threshold:.5});
+  document.querySelectorAll('.stat .n').forEach(function(n){io.observe(n)});})();
+
+// ===== 滚动浮现 + 进度 =====
+(function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.rv').forEach(function(r){io.observe(r)});
+  var pr=document.getElementById('progress'),nav=document.getElementById('nav');
+  window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-innerHeight;pr.style.width=(scrollY/h*100)+'%';nav.classList.toggle('on',scrollY>40)},{passive:true});})();
+
+// ===== 自定义光标 =====
+(function(){
+  if(window.matchMedia('(pointer: coarse)').matches)return;
+  var dot=document.querySelector('.cursor-dot'),ring=document.querySelector('.cursor-ring');
+  if(!dot||!ring)return;
+  var dx=innerWidth/2,dy=innerHeight/2,rx=dx,ry=dy;
+  window.addEventListener('mousemove',function(e){dx=e.clientX;dy=e.clientY;dot.style.left=dx+'px';dot.style.top=dy+'px'});
+  (function follow(){rx+=(dx-rx)*.16;ry+=(dy-ry)*.16;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(follow)})();
+  var sel='a,.btn,.proj,.stat,.skill,.step,.exp-card,.photo-card,.modal-close,.contact-btn,.gitee-link,.dash-chip,.cursor-ring';
+  document.addEventListener('mouseover',function(e){if(e.target.closest(sel))ring.classList.add('hover')});
+  document.addEventListener('mouseout',function(e){if(e.target.closest(sel))ring.classList.remove('hover')});
+})();
+
+// ===== Gitee 链接双保险：点击只开一个新标签页（保留 href/target 兼容中键）=====
+(function(){
+  var g=document.getElementById('giteeLink');if(!g)return;
+  g.addEventListener('click',function(e){
+    e.preventDefault();
+    try{window.open(g.href,'_blank','noopener')}catch(err){}
+  });
+})();
+
+// ===== 联系我（微信弹窗）=====
+(function(){
+  var modal=document.getElementById('contactModal');
+  var openBtn=document.getElementById('contactBtn');
+  var closeBtn=document.getElementById('contactClose');
+  function open(){modal.classList.add('open')}
+  function close(){modal.classList.remove('open')}
+  if(openBtn)openBtn.addEventListener('click',open);
+  if(closeBtn)closeBtn.addEventListener('click',close);
+  modal.addEventListener('click',function(e){if(e.target===modal)close()});
+})();
+</script>
+<div class="lightbox" id="lightbox"><button class="lb-close" type="button" title="关闭">×</button><img id="lightboxImg" alt="" onerror="this.style.display='none'"><div class="cap" id="lightboxCap"></div></div>
 </body>
 </html>
+
+
+
