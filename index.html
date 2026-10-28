@@ -27,9 +27,10 @@
   nav .links a{font-size:14px;color:var(--muted);transition:.25s;position:relative;display:flex;align-items:center;gap:4px}
   nav .links a::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--grad);transition:.3s}
   nav .links a:hover{color:#fff}nav .links a:hover::after{width:100%}
-  nav .links a.gitee-link{font-size:12px;letter-spacing:0;white-space:nowrap;flex-shrink:0;opacity:.88;cursor:pointer}
-  nav .links a.gitee-link::after{display:none}
-  nav .links a.gitee-link:hover{color:var(--nv);filter:drop-shadow(0 0 8px rgba(255,107,107,.6));opacity:1}
+  nav .links a.github-icon-link{display:flex;align-items:center;flex-shrink:0;opacity:.88;cursor:pointer;color:var(--muted)}
+  nav .links a.github-icon-link::after{display:none}
+  nav .links a.github-icon-link:hover{color:#fff;filter:drop-shadow(0 0 8px rgba(255,107,107,.6));opacity:1}
+  nav .links a.github-icon-link svg{display:block}
   .hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:130px 0 70px}
   .hero .prompt{font-family:Consolas,monospace;font-size:14px;color:var(--nc);margin-bottom:22px}
   .hero .blink{width:9px;height:20px;background:var(--nc);display:inline-block;animation:blink 1s steps(1) infinite;margin-left:8px}
@@ -200,6 +201,19 @@
   .contact-box p{color:var(--muted);font-size:13px}
   .contact-close{position:absolute;top:12px;right:14px;width:36px;height:36px;border-radius:10px;border:1px solid rgba(152,165,206,.3);background:transparent;color:var(--text);font-size:18px;cursor:pointer;line-height:1}
   .contact-close:hover{border-color:var(--nv);color:var(--nv)}
+  /* ===== 背景音乐控件（右下角，联系我按钮下方）===== */
+  .music-widget{position:fixed;right:22px;bottom:36px;z-index:1210;display:flex;align-items:center;gap:10px}
+  .music-main-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(152,165,206,.3);background:rgba(3,5,20,.72);backdrop-filter:blur(10px);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s;box-shadow:0 0 18px rgba(59,130,246,.22)}
+  .music-main-btn:hover{border-color:var(--nv);transform:translateY(-2px)}
+  .music-main-btn svg{width:20px;height:20px;fill:currentColor;pointer-events:none}
+  .music-main-btn.playing{border-color:var(--nv);color:var(--nv);box-shadow:0 0 22px rgba(255,107,107,.4)}
+  .music-panel{display:none;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;border:1px solid rgba(152,165,206,.25);background:rgba(3,5,20,.82);backdrop-filter:blur(10px)}
+  .music-panel.open{display:flex}
+  .music-panel label{font-size:12px;color:var(--muted);white-space:nowrap}
+  .music-panel input[type=range]{width:96px;accent-color:var(--nv);cursor:pointer}
+  .music-vol-num{font-size:12px;color:var(--nc);min-width:38px;text-align:right;font-variant-numeric:tabular-nums}
+  .music-close-x{width:30px;height:30px;border-radius:10px;border:1px solid rgba(152,165,206,.3);background:transparent;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;flex-shrink:0}
+  .music-close-x:hover{border-color:var(--nv);color:var(--nv)}
   /* ===== 作品详情：Word式导览 ===== */
   .detail-layout{display:block;max-width:920px;margin:0 auto;padding:34px 30px 100px;position:relative;z-index:2}
   .detail-body{min-width:0}
@@ -247,7 +261,7 @@
 <div id="progress"></div>
 <nav id="nav"><div class="inner">
   <div class="brand">CHEN <em>CONGHUI</em></div>
-  <div class="links"><a href="#awards">奖项</a><a href="#work">作品</a><a href="#experience">实践经历</a><a href="#method">方法</a><a href="#skills">技能</a><a href="#about">关于我</a><a class="gitee-link" id="giteeLink" href="https://gitee.com/chenconghui13671482642" target="_blank" rel="noopener">Gitee 个人主页：https://gitee.com/chenconghui13671482642</a></div>
+  <div class="links"><a href="#awards">奖项</a><a href="#work">作品</a><a href="#experience">实践经历</a><a href="#method">方法</a><a href="#skills">技能</a><a href="#about">关于我</a><a class="github-icon-link" href="https://github.com/chenconghui-yyazj" target="_blank" rel="noopener" title="GitHub 主页" aria-label="GitHub 主页"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.04 11.04 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg></a></div>
 </div></nav>
 
 <header class="hero"><div class="wrap">
@@ -371,6 +385,19 @@
     <h3>扫码加微信</h3>
     <img src="assets/VWlPbM76TowYzqxFDyscddL8nUd.jpg" alt="微信二维码">
     <p style="margin-top:6px;font-size:13px;color:var(--nc)">电话同号：13671482642</p>
+  </div>
+</div>
+
+<!-- ===== 背景音乐控件（右下角，联系我按钮下方）===== -->
+<div class="music-widget" id="musicWidget">
+  <button class="music-main-btn" id="musicToggle" title="播放/暂停背景音乐" aria-label="播放暂停背景音乐">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17.75V7h4V3h-6z"/></svg>
+  </button>
+  <div class="music-panel open" id="musicPanel">
+    <label>音量</label>
+    <input type="range" id="musicVol" min="0" max="100" value="20" aria-label="音量调节">
+    <span class="music-vol-num" id="musicVolNum">20%</span>
+    <button class="music-close-x" id="musicClose" title="关闭音乐控件" aria-label="关闭音乐控件">×</button>
   </div>
 </div>
 
@@ -1643,18 +1670,9 @@ window.__initEslDash=__initEslDash;
   var dx=innerWidth/2,dy=innerHeight/2,rx=dx,ry=dy;
   window.addEventListener('mousemove',function(e){dx=e.clientX;dy=e.clientY;dot.style.left=dx+'px';dot.style.top=dy+'px'});
   (function follow(){rx+=(dx-rx)*.16;ry+=(dy-ry)*.16;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(follow)})();
-  var sel='a,.btn,.proj,.stat,.skill,.step,.exp-card,.photo-card,.modal-close,.contact-btn,.gitee-link,.dash-chip,.cursor-ring';
+  var sel='a,.btn,.proj,.stat,.skill,.step,.exp-card,.photo-card,.modal-close,.contact-btn,.github-icon-link,.music-main-btn,.music-close-x,.dash-chip,.cursor-ring';
   document.addEventListener('mouseover',function(e){if(e.target.closest(sel))ring.classList.add('hover')});
   document.addEventListener('mouseout',function(e){if(e.target.closest(sel))ring.classList.remove('hover')});
-})();
-
-// ===== Gitee 链接双保险：点击只开一个新标签页（保留 href/target 兼容中键）=====
-(function(){
-  var g=document.getElementById('giteeLink');if(!g)return;
-  g.addEventListener('click',function(e){
-    e.preventDefault();
-    try{window.open(g.href,'_blank','noopener')}catch(err){}
-  });
 })();
 
 // ===== 联系我（微信弹窗）=====
@@ -1667,6 +1685,42 @@ window.__initEslDash=__initEslDash;
   if(openBtn)openBtn.addEventListener('click',open);
   if(closeBtn)closeBtn.addEventListener('click',close);
   modal.addEventListener('click',function(e){if(e.target===modal)close()});
+})();
+
+// ===== 背景音乐控件：默认音量20%，可滑块调节，可关闭收起 =====
+(function(){
+  var audio=new Audio('assets/bgm.mp3');
+  audio.loop=true;
+  audio.volume=0.2; // 默认音量 20%
+  audio.preload='auto';
+  var toggle=document.getElementById('musicToggle');
+  var panel=document.getElementById('musicPanel');
+  var vol=document.getElementById('musicVol');
+  var volNum=document.getElementById('musicVolNum');
+  var closeX=document.getElementById('musicClose');
+  var playing=false;
+
+  function setPlaying(state){
+    playing=state;
+    toggle.classList.toggle('playing',playing);
+  }
+  // 主按钮：播放 / 暂停切换（按钮点击本身即浏览器认可的用户手势，可直接播放）
+  toggle.addEventListener('click',function(){
+    if(playing){audio.pause();setPlaying(false);return}
+    audio.play().then(function(){setPlaying(true)}).catch(function(){setPlaying(false)});
+  });
+  // 音量滑块：0~100 映射到 0~1 的 audio.volume
+  vol.addEventListener('input',function(){
+    var v=parseInt(vol.value,10);
+    volNum.textContent=v+'%';
+    audio.volume=v/100;
+  });
+  // 关闭 X：暂停并隐藏整个控件
+  closeX.addEventListener('click',function(){
+    audio.pause();setPlaying(false);
+    panel.classList.remove('open');
+    document.getElementById('musicWidget').style.display='none';
+  });
 })();
 </script>
 <div class="lightbox" id="lightbox"><button class="lb-close" type="button" title="关闭">×</button><img id="lightboxImg" alt="" onerror="this.style.display='none'"><div class="cap" id="lightboxCap"></div></div>
