@@ -358,7 +358,7 @@
   <div class="sec-head rv"><div class="sec-tag">// skills</div><div class="sec-title">技能栈</div><div class="sec-lead">熟练掌握并能独立应用于实际项目的数据分析技能栈，覆盖数据清洗、统计建模、数据可视化与 AI 智能体应用全流程。</div></div>
   <div class="skills rv">
     <div class="skill skill-link" data-skill="python" role="button" tabindex="0" title="点击查看 Python 数据分析项目"><b>Python</b><div class="what">pandas 数据清洗合并 · numpy 计算 · jieba 分词 · matplotlib / seaborn 绘图 · 全流程可复现</div><div class="skill-tip">点击查看 <span>→</span></div></div>
-    <div class="skill"><b>SQL</b><div class="what">增删改查 · 多表关联 · 窗口函数 · 聚合分组统计</div></div>
+    <div class="skill skill-link" data-skill="sql" role="button" tabindex="0" title="点击查看 SQL 电商数据分析项目"><b>SQL</b><div class="what">增删改查 · 多表关联 · 窗口函数 · 聚合分组统计</div><div class="skill-tip">点击查看 <span>→</span></div></div>
     <div class="skill"><b>数据可视化</b><div class="what">matplotlib / seaborn / ECharts · 中英双语图表 · 规范配色与信息层级</div></div>
     <div class="skill-group">
       <div class="skill-group-title">综合项目 · 产品经理实习生招聘数据分析（点击下方卡片查看）</div>
@@ -1428,6 +1428,193 @@ q1, q3 = 订单["单价"].quantile(0.25), 订单["单价"].quantile(0.75)
       <li><strong>技能</strong>：数据分析、沟通协作、基础 AI 应用是硬性核心技能，SQL、竞品分析、PRD 为高频专业要求。</li>
     </ul>
     <p>完整原始数据、清洗结果、核心代码与全部结果图表见 GitHub 仓库：<a href="https://github.com/chenconghui-yyazj/product-manager-intern-data-analysis" target="_blank" rel="noopener" style="color:var(--nv);text-decoration:underline">product-manager-intern-data-analysis</a>。</p>
+  </div>
+</div>
+
+    <!-- SQL 电商数据分析项目详情 -->
+    <div data-proj="sql">
+  <h1>电商用户行为数据分析项目（MySQL）</h1>
+  <div class="dmeta">MySQL 8.0 · 多表关联 · CASE WHEN · 分层聚合 · 窗口函数 · RFM 模型 ｜ 1200 用户 · 180 商品 · 9000 次访问 · 5956 笔订单 · 350 条退款记录 · 数据周期 2025 全年</div>
+
+  <div class="secbox">
+    <h2>01 项目背景与数据字典</h2>
+    <p class="dlead">模拟一家全年运营的综合电商平台，基于访问埋点、订单主表、订单明细、退款记录以及用户、商品维度表，搭建常态化业务指标体系：评估流量转化效率、做 RFM 用户分层、衡量用户粘性、分析客单价与凑单效果、定位售后风险，为投放预算、用户运营、商品品控与售后策略提供数据支撑。</p>
+    <p>项目共 6 张表，先维度表后事实表导入；主外键已 100% 对齐。全局口径：<b>成交订单</b>取 <code>order_status='已完成'</code>，<b>有效退款</b>取 <code>refund_status='退款成功'</code>；UV 用 <code>COUNT(DISTINCT user_id)</code>，PV 为访问会话记录数。</p>
+    <table>
+      <tr><th>表名</th><th>类型 / 粒度</th><th>行数</th><th>业务含义</th></tr>
+      <tr><td>dim_user</td><td>维度表 · 用户</td><td>1200</td><td>用户基础信息、会员等级、注册渠道</td></tr>
+      <tr><td>dim_product</td><td>维度表 · 商品</td><td>180</td><td>商品类目、名称、成本价、售价、在售状态</td></tr>
+      <tr><td>fact_traffic</td><td>事实表 · 访问会话</td><td>9000</td><td>流量渠道、落地页、是否转化、停留时长</td></tr>
+      <tr><td>fact_order</td><td>事实表 · 订单</td><td>5956</td><td>订单金额、件数、状态、支付方式、省份</td></tr>
+      <tr><td>fact_order_detail</td><td>事实表 · 订单-商品</td><td>6000</td><td>购买数量、单价、折扣、明细金额</td></tr>
+      <tr><td>fact_refund</td><td>事实表 · 退款</td><td>350</td><td>退款原因、金额、退款状态</td></tr>
+    </table>
+  </div>
+
+  <div class="secbox">
+    <h2>02 转化漏斗分析（访问 → 转化 → 成交）</h2>
+    <p>漏斗主体在流量表内完成「访问 → 转化」，使用 UV；成交来自订单表单独统计。一个用户可能从多个渠道访问，渠道 UV 之间存在重叠，不可横向相加。</p>
+    <div class="code"><pre><span class="cm">-- 大盘漏斗：访问 UV / 转化 UV / 成交下单 UV</span>
+SELECT
+    COUNT(DISTINCT t.user_id) AS 访问UV,
+    COUNT(DISTINCT CASE WHEN t.is_convert=1 THEN t.user_id END) AS 转化UV,
+    ROUND(COUNT(DISTINCT CASE WHEN t.is_convert=1 THEN t.user_id END)
+          / COUNT(DISTINCT t.user_id), 3) AS 访问转化率,
+    COUNT(DISTINCT o.user_id) AS 成交下单UV
+FROM fact_traffic t
+LEFT JOIN fact_order o
+  ON t.user_id=o.user_id AND o.order_status='已完成';</pre></div>
+    <table>
+      <tr><th>访问 UV</th><th>转化 UV</th><th>访问转化率</th><th>成交下单 UV</th><th>访问成交率</th></tr>
+      <tr><td>1200</td><td>888</td><td>0.740</td><td>1191</td><td>0.993</td></tr>
+    </table>
+    <table>
+      <tr><th>流量渠道</th><th>访问 UV</th><th>转化 UV</th><th>访问转化率</th></tr>
+      <tr><td>抖音短视频</td><td>969</td><td>311</td><td>0.321</td></tr>
+      <tr><td>自然搜索</td><td>1002</td><td>300</td><td>0.299</td></tr>
+      <tr><td>朋友圈广告</td><td>723</td><td>201</td><td>0.278</td></tr>
+      <tr><td>直播间</td><td>846</td><td>225</td><td>0.266</td></tr>
+      <tr><td>老客推荐</td><td>678</td><td>177</td><td>0.261</td></tr>
+      <tr><td>直通车</td><td>804</td><td>209</td><td>0.260</td></tr>
+    </table>
+    <p><b>解读：</b>抖音短视频、自然搜索转化质量最高，可优先分配预算；直通车、直播间转化偏低，需优化素材与落地承接。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>03 RFM 用户分层</h2>
+    <p>仅统计已完成订单，基准日 2025-12-31。R 为距最近成交天数，F 为成交订单数，M 为累计成交金额；内层按用户聚合，外层 <code>CASE WHEN</code> 打标签。</p>
+    <div class="code"><pre><span class="cm">-- R/F/M 明细 + 分层标签（阈值：R≤30 活跃 / R&gt;90 沉睡；F≥5 高频；M≥3000 高消费）</span>
+SELECT user_id, R, F, M,
+  CASE
+    WHEN R&lt;=30 AND F&gt;=5 AND M&gt;=3000 THEN '重要价值用户'
+    WHEN R&gt;90  AND F&gt;=5 AND M&gt;=3000 THEN '重要挽回用户'
+    WHEN R&lt;=30 AND F=1  AND M&lt;1000 THEN '新客观察'
+    WHEN R&lt;=30 AND F&gt;=2 AND M&lt;3000 THEN '潜力用户'
+    WHEN R&gt;90 THEN '流失沉睡用户'
+    ELSE '一般维持用户'
+  END AS user_tag
+FROM (
+  SELECT user_id,
+    DATEDIFF('2025-12-31', MAX(order_date)) AS R,
+    COUNT(DISTINCT order_id) AS F,
+    SUM(order_amount) AS M
+  FROM fact_order WHERE order_status='已完成'
+  GROUP BY user_id
+) base;</pre></div>
+    <table>
+      <tr><th>用户分层</th><th>用户数</th><th>人数占比</th><th>运营动作建议</th></tr>
+      <tr><td>一般维持用户</td><td>447</td><td>0.375</td><td>常规触达，推送通用活动</td></tr>
+      <tr><td>流失沉睡用户</td><td>352</td><td>0.296</td><td>超 90 天未成交，短信 / 优惠券召回</td></tr>
+      <tr><td>潜力用户</td><td>247</td><td>0.207</td><td>近期有复购、金额中等，满减券拉升客单</td></tr>
+      <tr><td>重要价值用户</td><td>105</td><td>0.088</td><td>专属权益、新品优先体验，重点维护</td></tr>
+      <tr><td>重要挽回用户</td><td>33</td><td>0.028</td><td>历史高频高消费但近期流失，定向挽回</td></tr>
+      <tr><td>新客观察</td><td>7</td><td>0.006</td><td>首单用户，持续培育复购习惯</td></tr>
+    </table>
+    <table>
+      <tr><th>user_id</th><th>R（天）</th><th>F（单）</th><th>M（元）</th></tr>
+      <tr><td>U100964</td><td>6</td><td>11</td><td>8086.24</td></tr>
+      <tr><td>U100346</td><td>94</td><td>9</td><td>6918.30</td></tr>
+      <tr><td>U100088</td><td>37</td><td>7</td><td>6904.40</td></tr>
+      <tr><td>U100076</td><td>7</td><td>8</td><td>6637.58</td></tr>
+      <tr><td>U100292</td><td>8</td><td>8</td><td>6560.01</td></tr>
+    </table>
+  </div>
+
+  <div class="secbox">
+    <h2>04 复购分析（用户粘性）</h2>
+    <p>用户口径复购率 = 成交 ≥ 2 次用户 / 全部成交用户；先内层按用户统计订单数，外层判断 ≥ 2。两套口径不可混用：用户口径衡量「多少人愿意再来」，订单口径衡量「营收里多少来自老客」。</p>
+    <div class="code"><pre><span class="cm">-- 用户口径复购率</span>
+SELECT
+  COUNT(DISTINCT user_id) AS 全部成交用户数,
+  COUNT(DISTINCT CASE WHEN order_cnt&gt;=2 THEN user_id END) AS 复购用户数,
+  ROUND(COUNT(DISTINCT CASE WHEN order_cnt&gt;=2 THEN user_id END)
+        / COUNT(DISTINCT user_id), 3) AS 用户复购率,
+  ROUND(AVG(order_cnt), 2) AS 人均下单次数
+FROM (
+  SELECT user_id, COUNT(DISTINCT order_id) AS order_cnt
+  FROM fact_order WHERE order_status='已完成'
+  GROUP BY user_id
+) t;</pre></div>
+    <table>
+      <tr><th>成交用户</th><th>复购用户</th><th>用户复购率</th><th>人均下单次数</th><th>订单口径复购率</th></tr>
+      <tr><td>1191</td><td>1120</td><td>0.940</td><td>4.32</td><td>5076 / 5147 = 0.986</td></tr>
+    </table>
+    <p><b>解读：</b>用户复购率 94.0%、人均成交 4.32 单，平台基本盘稳固、营收高度依赖老客复购；另有 71 名单次成交用户，是二次转化的重点对象。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>05 客单价与连带率</h2>
+    <p>订单主表已是订单粒度，直接在订单层计算：客单价 = 成交总额 / 订单数，连带率 = 商品总件数 / 订单数；商品维度分析才下钻明细表。</p>
+    <div class="code"><pre><span class="cm">-- 大盘客单价 + 连带率</span>
+SELECT
+  COUNT(order_id) AS 成交订单数,
+  ROUND(SUM(order_amount), 2) AS 成交总销售额,
+  ROUND(SUM(order_amount)/COUNT(order_id), 2) AS 客单价,
+  ROUND(SUM(item_count)/COUNT(order_id), 2) AS 连带率
+FROM fact_order WHERE order_status='已完成';</pre></div>
+    <table>
+      <tr><th>成交订单数</th><th>成交总销售额（元）</th><th>客单价（元）</th><th>连带率（件/单）</th></tr>
+      <tr><td>5147</td><td>2,586,694.74</td><td>502.56</td><td>2.53</td></tr>
+    </table>
+    <table>
+      <tr><th>商品类目</th><th>关联订单数</th><th>品类销售额（元）</th><th>销售件数</th></tr>
+      <tr><td>美妆护肤</td><td>1173</td><td>657,599.90</td><td>2960</td></tr>
+      <tr><td>家居日用</td><td>1163</td><td>598,986.20</td><td>2960</td></tr>
+      <tr><td>食品生鲜</td><td>991</td><td>507,030.29</td><td>2495</td></tr>
+      <tr><td>服饰鞋包</td><td>982</td><td>467,962.36</td><td>2501</td></tr>
+      <tr><td>数码家电</td><td>870</td><td>355,115.99</td><td>2124</td></tr>
+    </table>
+  </div>
+
+  <div class="secbox">
+    <h2>06 退款分析（售后与风控）</h2>
+    <p>订单表 <code>LEFT JOIN</code> 退款表，保证全部成交订单进入分母；退款分子只取「退款成功」。订单退款率看售后，金额退款率看财务。</p>
+    <div class="code"><pre><span class="cm">-- 大盘退款率：订单口径 + 金额口径</span>
+SELECT
+  COUNT(DISTINCT o.order_id) AS 成交订单数,
+  COUNT(DISTINCT r.order_id) AS 退款订单数,
+  ROUND(COUNT(DISTINCT r.order_id)/COUNT(DISTINCT o.order_id),3) AS 订单退款率,
+  IFNULL(SUM(r.refund_amount),0) AS 退款总金额,
+  ROUND(IFNULL(SUM(r.refund_amount),0)/SUM(o.order_amount),3) AS 金额退款率
+FROM fact_order o
+LEFT JOIN fact_refund r
+  ON o.order_id=r.order_id AND r.refund_status='退款成功'
+WHERE o.order_status='已完成';</pre></div>
+    <table>
+      <tr><th>成交订单数</th><th>退款订单数</th><th>订单退款率</th><th>退款总金额（元）</th><th>金额退款率</th></tr>
+      <tr><td>5147</td><td>312</td><td>0.061</td><td>106,435.37</td><td>0.041</td></tr>
+    </table>
+    <table>
+      <tr><th>退款原因</th><th>退款订单数</th><th>原因占比</th></tr>
+      <tr><td>物流损坏</td><td>57</td><td>0.183</td></tr>
+      <tr><td>与描述不符</td><td>57</td><td>0.183</td></tr>
+      <tr><td>尺码/规格不符</td><td>56</td><td>0.179</td></tr>
+      <tr><td>商品质量问题</td><td>51</td><td>0.163</td></tr>
+      <tr><td>七天无理由</td><td>46</td><td>0.147</td></tr>
+      <tr><td>发错货</td><td>45</td><td>0.144</td></tr>
+    </table>
+    <table>
+      <tr><th>商品名称</th><th>商品类目</th><th>关联订单数</th><th>退款订单数</th><th>退款率</th></tr>
+      <tr><td>台灯</td><td>家居日用</td><td>361</td><td>31</td><td>0.086</td></tr>
+      <tr><td>黑咖啡</td><td>食品生鲜</td><td>198</td><td>17</td><td>0.086</td></tr>
+      <tr><td>洗面奶</td><td>美妆护肤</td><td>237</td><td>19</td><td>0.080</td></tr>
+      <tr><td>每日坚果</td><td>食品生鲜</td><td>191</td><td>15</td><td>0.079</td></tr>
+      <tr><td>蓝牙耳机</td><td>数码家电</td><td>153</td><td>12</td><td>0.078</td></tr>
+    </table>
+  </div>
+
+  <div class="secbox">
+    <h2>07 结论与项目仓库</h2>
+    <ul>
+      <li><b>流量：</b>抖音短视频、自然搜索转化质量最高，建议加大预算；直通车、直播间转化偏低，优化投放素材与落地承接。</li>
+      <li><b>用户：</b>复购率 94.0%、人均 4.32 单，基本盘稳固；29.6% 用户进入流失沉睡状态，应启动分层召回；105 名重要价值用户配置专属权益防止流失。</li>
+      <li><b>商品：</b>连带率 2.53 仍有提升空间，可通过套装、凑单满减、搭配推荐拉高件数；美妆护肤、家居日用为核心类目。</li>
+      <li><b>售后：</b>退款主因是物流损坏与描述不符，建议加强包装与物流核验、完善详情页图文与尺码表；对退款率靠前的单品做专项品控复盘。</li>
+    </ul>
+    <div class="kbox">
+      <p>项目含 6 张原始数据集（CSV + Excel 汇总工作簿）、建表脚本、5 大模块完整 SQL、项目报告与运行结果汇总表，已托管至 GitHub，可查看完整代码与数据。</p>
+      <p><a href="https://github.com/chenconghui-yyazj/sql-ecommerce-analysis" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;background:var(--grad);color:#0a0216;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 0 30px rgba(255,79,216,.35)">GitHub 仓库：sql-ecommerce-analysis →</a></p>
+    </div>
   </div>
 </div>
 
