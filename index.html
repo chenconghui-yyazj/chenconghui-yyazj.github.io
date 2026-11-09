@@ -94,6 +94,9 @@
   .skill b{font-size:15px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .skill .what{font-size:13px;color:var(--muted);margin-top:8px;border-left:2px solid rgba(124,107,255,.4);padding-left:10px}
   .skill .what span{display:block;color:var(--nc);font-size:11px;letter-spacing:1px;margin-bottom:2px}
+  .skill-link{cursor:pointer;position:relative}
+  .skill-link .skill-tip{margin-top:12px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--nc);border:1px solid rgba(152,165,206,.3);border-radius:999px;padding:5px 12px;transition:.25s}
+  .skill-link:hover .skill-tip{background:var(--grad);color:#0a0216;border-color:transparent;box-shadow:0 8px 24px -12px rgba(255,79,216,.6)}
   .exp{display:grid;grid-template-columns:1fr;gap:16px}
   .exp-card{background:linear-gradient(165deg,rgba(16,20,50,.72),#0a0e2a);border:1px solid rgba(152,165,206,.16);border-radius:22px;padding:28px;transition:.3s}
   .exp-card:hover{border-color:var(--nm);box-shadow:0 20px 60px -30px rgba(59,130,246,.4)}
@@ -345,7 +348,7 @@
 <section id="skills"><div class="wrap">
   <div class="sec-head rv"><div class="sec-tag">// skills</div><div class="sec-title">技能栈</div><div class="sec-lead">熟练掌握并能独立应用于实际项目的数据分析技能栈，覆盖数据清洗、统计建模、数据可视化与 AI 智能体应用全流程。</div></div>
   <div class="skills rv">
-    <div class="skill"><b>Python</b><div class="what">pandas 数据清洗合并 · numpy 计算 · jieba 分词 · matplotlib / seaborn 绘图 · 全流程可复现</div></div>
+    <div class="skill skill-link" data-skill="python" role="button" tabindex="0" title="点击查看 Python 数据分析项目"><b>Python</b><div class="what">pandas 数据清洗合并 · numpy 计算 · jieba 分词 · matplotlib / seaborn 绘图 · 全流程可复现</div><div class="skill-tip">点击查看 <span>→</span></div></div>
     <div class="skill"><b>SQL</b><div class="what">增删改查 · 多表关联 · 窗口函数 · 聚合分组统计</div></div>
     <div class="skill"><b>SPSS</b><div class="what">描述统计 · T 检验 / ANOVA · K-Means / 二阶聚类 · 因子分析 · Logistic 回归 · 时间序列 ARIMA · 判别分析</div></div>
     <div class="skill"><b>Excel</b><div class="what">数据透视表 · 常用函数（VLOOKUP 等）· 规划求解 · 条件格式 · 图表美化</div></div>
@@ -1219,6 +1222,101 @@ gsum = sum(float(r["share_pct"]) for r in individual if r.get("scope","")=="全�
   </div>
 </div>
 
+<!-- Python 电商销售数据分析详情 -->
+<div data-proj="python">
+  <h1>电商销售数据分析与可视化：Python 全流程实战</h1>
+  <div class="dmeta">Python 3.10 · pandas · numpy · matplotlib · seaborn · Jupyter Notebook ｜ 3 张业务表 · 2,509 条有效订单 · 681 位用户 · 累计销售额 1,050.51 万元 · 9 张结果图</div>
+  <p class="dlead">从「脏数据」到「业务结论」的完整闭环：缺失值 / 重复 / 异常值清洗 → 多表合并 → 分组聚合与透视 → 客单价 / 复购率 / RFM 指标体系 → matplotlib / seaborn 可视化，全流程可复现、可面试讲解。</p>
+
+  <div class="secbox">
+    <h2>01 项目概述</h2>
+    <p>项目模拟一家电商企业的真实销售场景：三张业务表（订单明细、用户信息、商品信息）被人为注入缺失值、重复订单号、负数数量、离谱单价、混合格式日期、性别与城市写法混乱等问题。分析目标是把这些「脏」数据清洗成可信口径，再从品类、城市、时间、用户四个维度输出可执行的运营结论。</p>
+    <div class="kbox">
+      <p><b>分析链路：</b>读取概览 → 数据清洗（缺失 / 重复 / IQR 异常 / 日期 / 文本口径）→ 整理合并（merge / concat / query）→ 分组聚合（groupby / agg / pivot_table / crosstab / resample）→ 业务指标（客单价 / 件单价 / 复购率 / RFM / 帕累托）→ 三类可视化 → 结论与建议。</p>
+      <p><b>工程化：</b>固定随机种子（2024）生成数据，脚本化清洗与出图，Notebook 共 70 个单元格、51 个代码块，每个代码块均有逐行中文注释，可逐模块验证。</p>
+    </div>
+  </div>
+
+  <div class="secbox">
+    <h2>02 数据集与清洗</h2>
+    <table>
+      <tr><th>表名</th><th>行数</th><th>核心字段</th><th>注入的脏数据</th></tr>
+      <tr><td>订单明细表</td><td>2,640</td><td>订单号 / 用户ID / 订单日期 / 商品ID / 数量 / 单价 / 折扣 / 运费 / 订单金额 / 发货城市 / 订单状态</td><td>缺失、重复订单号、负数量、离谱单价、混格式日期、城市中英混写</td></tr>
+      <tr><td>用户信息表</td><td>700</td><td>用户ID / 姓名 / 性别 / 年龄 / 注册日期 / 会员等级 / 城市</td><td>性别缺失、年龄越界、会员等级带空格</td></tr>
+      <tr><td>商品信息表</td><td>180</td><td>商品ID / 商品名称 / 品类 / 品牌 / 成本价 / 上架日期 / 库存</td><td>品牌缺失、成本价缺失</td></tr>
+    </table>
+    <p><b>清洗规则：</b>数量缺失按品类中位数填充；订单金额缺失按「数量 × 单价 ×(1-折扣)+运费」回算；先删完全重复行、再按订单号保留金额最大的一行；数量 ≤ 0 直接剔除；折扣截断到 [0, 0.3]；单价用 IQR 上界截断；混合日期统一 <b>to_datetime</b> 并把无法解析的置空删除；城市英文转中文、去「省」、非标准城市归「其他」。</p>
+    <p><b>清洗结果：</b>原始 2,640 条订单 → 有效 <b>2,509</b> 单，保留率 95.0%。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>03 核心指标</h2>
+    <table>
+      <tr><th>指标</th><th>数值</th><th>指标</th><th>数值</th></tr>
+      <tr><td>有效订单数</td><td><b>2,509 单</b></td><td>下单用户数</td><td><b>681 人</b></td></tr>
+      <tr><td>总销售额</td><td><b>10,505,068.52 元</b></td><td>总销量</td><td><b>7,618 件</b></td></tr>
+      <tr><td>客单价</td><td><b>4,186.95 元</b></td><td>件单价</td><td><b>1,378.98 元</b></td></tr>
+      <tr><td>复购率</td><td><b>88.84%</b></td><td>Top 品类 / 城市</td><td><b>数码 / 苏州</b></td></tr>
+    </table>
+    <table>
+      <tr><th>品类</th><th>销售额（元）</th><th>销量</th><th>订单数</th><th>客单价（元）</th></tr>
+      <tr><td>数码</td><td>3,272,423</td><td>1,252</td><td>411</td><td>7,962</td></tr>
+      <tr><td>家电</td><td>2,280,577</td><td>1,295</td><td>428</td><td>5,328</td></tr>
+      <tr><td>服饰</td><td>1,582,177</td><td>1,296</td><td>414</td><td>3,822</td></tr>
+      <tr><td>食品</td><td>1,492,652</td><td>1,278</td><td>429</td><td>3,479</td></tr>
+      <tr><td>美妆</td><td>971,701</td><td>1,260</td><td>411</td><td>2,364</td></tr>
+      <tr><td>图书</td><td>905,539</td><td>1,237</td><td>416</td><td>2,177</td></tr>
+    </table>
+  </div>
+
+  <div class="secbox">
+    <h2>04 可视化结果</h2>
+    <div class="fig"><img src="projects/ecommerce-sales-analysis/fig/fig01_monthly.png" alt="月度销售额趋势" loading="lazy"><div class="cap">图1 · 月度销售额趋势：8 月峰值约 198 万，5 月低谷约 47 万</div></div>
+    <div class="fig"><img src="projects/ecommerce-sales-analysis/fig/fig02_category_sales.png" alt="各品类销售额对比" loading="lazy"><div class="cap">图2 · 各品类销售额对比：数码 + 家电合计贡献约 53%</div></div>
+    <div class="fig"><img src="projects/ecommerce-sales-analysis/fig/fig03_category_share.png" alt="各品类销售额占比" loading="lazy"><div class="cap">图3 · 品类销售额占比：数码 31.1%，家电 21.7%</div></div>
+    <div class="fig"><img src="projects/ecommerce-sales-analysis/fig/fig06_corr.png" alt="相关性矩阵" loading="lazy"><div class="cap">图4 · 数值指标相关性矩阵：订单金额与数量、单价强相关</div></div>
+    <div class="fig"><img src="projects/ecommerce-sales-analysis/fig/fig07_rfm.png" alt="RFM 用户分层" loading="lazy"><div class="cap">图5 · RFM 用户分层：一般挽留客户 183 人，是唤醒重点</div></div>
+    <div class="fig"><img src="projects/ecommerce-sales-analysis/fig/fig09_heat.png" alt="品类城市热力图" loading="lazy"><div class="cap">图6 · 品类 × 城市销售额热力图</div></div>
+  </div>
+
+  <div class="secbox">
+    <h2>05 核心代码</h2>
+    <div class="code"><pre><span class="cm"># 读取三张业务表</span>
+订单 = pd.read_excel("电商销售原始数据.xlsx", sheet_name="订单明细表")
+用户 = pd.read_excel("电商销售原始数据.xlsx", sheet_name="用户信息表")
+商品 = pd.read_excel("电商销售原始数据.xlsx", sheet_name="商品信息表")
+
+<span class="cm"># 缺失值：数量用品类中位数填充（同类商品更可比）</span>
+订单["数量"] = 订单["数量"].fillna(订单.groupby("品类")["数量"].transform("median"))
+
+<span class="cm"># 去重：先删完全重复行，再按订单号保留金额最大的一行</span>
+订单 = 订单.drop_duplicates()
+订单 = 订单.sort_values("订单金额", ascending=False).drop_duplicates("订单号", keep="first")
+
+<span class="cm"># 异常值：用 IQR 上界截断离谱单价</span>
+q1, q3 = 订单["单价"].quantile(0.25), 订单["单价"].quantile(0.75)
+上界 = q3 + 1.5 * (q3 - q1)
+订单["单价"] = 订单["单价"].clip(upper=上界)
+
+<span class="cm"># 分组聚合：按月统计销售额、订单数、客单价</span>
+按月 = 订单.groupby("订单月份").agg(
+    总销售额=("订单金额", "sum"),
+    订单数=("订单号", "nunique"),
+    客单价=("订单金额", "mean")
+).reset_index()</pre></div>
+  </div>
+
+  <div class="secbox">
+    <h2>06 结论与完整项目</h2>
+    <p><b>1. 品类结构：</b>数码 + 家电贡献过半销售额，应作为主推与库存保障重点；图书、美妆客单价低，适合拉新与凑单。</p>
+    <p><b>2. 季节节奏：</b>8 月峰值、5 月低谷，大促前 1 个月提前备货，5 月作为清库存与会员唤醒窗口。</p>
+    <p><b>3. 用户运营：</b>复购率 88.84% 说明粘性较好，但「一般挽留客户」183 人占比高，建议优惠券 + 召回短信分层触达。</p>
+    <p><b>4. 价格策略：</b>折扣与订单金额弱负相关，说明「打折不一定带来更高客单」，应转向满减 / 组合套餐提升件单价。</p>
+    <p style="margin-top:18px;color:var(--nc);font-size:13px;font-weight:700">↓ 完整项目（原始 Excel 数据 + 教学 Notebook + 全部代码 + 9 张结果图）</p>
+    <p><a href="https://github.com/chenconghui-yyazj/chenconghui-yyazj.github.io/tree/main/projects/ecommerce-sales-analysis" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;background:var(--grad);color:#0a0216;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 0 30px rgba(255,79,216,.35)">在 GitHub 查看完整项目 →</a></p>
+  </div>
+</div>
+
     </div>
     </div>
   </div>
@@ -1281,6 +1379,21 @@ document.querySelectorAll('.proj').forEach(function(p){p.addEventListener('click
   // ESL 项目交互式看板
   if(k==='esl'){setTimeout(function(){if(window.__initEslDash)window.__initEslDash();},120);}
 })});
+// 技能卡片（Python）点击 → 打开对应项目详情
+document.querySelectorAll('.skill-link[data-skill]').forEach(function(p){
+  p.addEventListener('click',function(){
+    var k=p.getAttribute('data-skill');
+    detail.querySelectorAll('[data-proj]').forEach(function(d){d.style.display=(d.getAttribute('data-proj')===k)?'block':'none'});
+    detail.classList.add('open');detail.scrollTop=0;
+    var block=detail.querySelector('[data-proj="'+k+'"]');
+    if(!block)return;
+    block.querySelectorAll('.detail-back-bottom').forEach(function(b){b.remove()});
+    var bb=document.createElement('div');bb.style.textAlign='center';
+    bb.innerHTML='<button class="detail-back-bottom" onclick="closeDetail()">← 返回作品集</button>';
+    block.appendChild(bb);
+    __buildDetailSide(k,block);
+  });
+});
 function closeDetail(){detail.classList.remove('open')}
 // 作品详情页左侧导览：按 secbox 标题生成锚点
 var __sideLinks=[];
