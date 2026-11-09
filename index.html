@@ -97,6 +97,10 @@
   .skill-link{cursor:pointer;position:relative}
   .skill-link .skill-tip{margin-top:12px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--nc);border:1px solid rgba(152,165,206,.3);border-radius:999px;padding:5px 12px;transition:.25s}
   .skill-link:hover .skill-tip{background:var(--grad);color:#0a0216;border-color:transparent;box-shadow:0 8px 24px -12px rgba(255,79,216,.6)}
+  .skill-group{grid-column:1/-1;border:1px dashed rgba(168,85,247,.35);border-radius:20px;padding:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;background:rgba(124,107,255,.06)}
+  .skill-group-title{grid-column:1/-1;font-size:12px;color:var(--nc);letter-spacing:1px;display:flex;align-items:center;gap:8px}
+  .skill-group-title::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--grad)}
+  @media(max-width:860px){.skill-group{grid-template-columns:1fr}}
   .exp{display:grid;grid-template-columns:1fr;gap:16px}
   .exp-card{background:linear-gradient(165deg,rgba(16,20,50,.72),#0a0e2a);border:1px solid rgba(152,165,206,.16);border-radius:22px;padding:28px;transition:.3s}
   .exp-card:hover{border-color:var(--nm);box-shadow:0 20px 60px -30px rgba(59,130,246,.4)}
@@ -310,6 +314,11 @@
   </div>
   <span class="more">查看完整项目</span>
 </div>
+    <div class="proj" data-proj="pm"><div class="no">PROJECT / 04</div><h3>产品经理实习生招聘数据分析：采集 · 清洗 · 建模 · 可视化</h3>
+      <div class="desc">八爪鱼自采 1214 条招聘数据，Excel 清洗标准化、SPSS 回归建模、Tableau 多维仪表板，从城市 / 行业 / 学历 / 规模 / 薪资六维刻画实习招聘市场。</div>
+      <div class="tech"><span>Excel</span><span>SPSS</span><span>Tableau</span><span>八爪鱼采集</span></div>
+      <div class="kpi"><span>有效样本 <b>979</b></span><span>采集 <b>1214</b></span><span>分析维度 <b>6</b></span><span>结果图表 <b>20</b></span></div>
+      <span class="more">查看完整项目</span></div>
   </div>
 </div></section>
 
@@ -350,10 +359,13 @@
   <div class="skills rv">
     <div class="skill skill-link" data-skill="python" role="button" tabindex="0" title="点击查看 Python 数据分析项目"><b>Python</b><div class="what">pandas 数据清洗合并 · numpy 计算 · jieba 分词 · matplotlib / seaborn 绘图 · 全流程可复现</div><div class="skill-tip">点击查看 <span>→</span></div></div>
     <div class="skill"><b>SQL</b><div class="what">增删改查 · 多表关联 · 窗口函数 · 聚合分组统计</div></div>
-    <div class="skill"><b>SPSS</b><div class="what">描述统计 · T 检验 / ANOVA · K-Means / 二阶聚类 · 因子分析 · Logistic 回归 · 时间序列 ARIMA · 判别分析</div></div>
-    <div class="skill"><b>Excel</b><div class="what">数据透视表 · 常用函数（VLOOKUP 等）· 规划求解 · 条件格式 · 图表美化</div></div>
-    <div class="skill"><b>PowerBI</b><div class="what">数据建模 · DAX 度量 · 交互式看板</div></div>
     <div class="skill"><b>数据可视化</b><div class="what">matplotlib / seaborn / ECharts · 中英双语图表 · 规范配色与信息层级</div></div>
+    <div class="skill-group">
+      <div class="skill-group-title">综合项目 · 产品经理实习生招聘数据分析（点击下方卡片查看）</div>
+      <div class="skill skill-link" data-skill="pm" role="button" tabindex="0" title="点击查看综合项目"><b>Excel</b><div class="what">数据清洗 · 去重 / 缺失值 / 异常值 · 薪资标准化 · 函数与文本字段提取</div><div class="skill-tip">点击查看 <span>→</span></div></div>
+      <div class="skill skill-link" data-skill="pm" role="button" tabindex="0" title="点击查看综合项目"><b>PowerBI</b><div class="what">数据建模 · DAX 度量 · 交互式看板 · Tableau 多维仪表板</div><div class="skill-tip">点击查看 <span>→</span></div></div>
+      <div class="skill skill-link" data-skill="pm" role="button" tabindex="0" title="点击查看综合项目"><b>SPSS</b><div class="what">描述统计 · 箱线图 · 虚变量编码 · 线性回归建模</div><div class="skill-tip">点击查看 <span>→</span></div></div>
+    </div>
     <div class="skill"><b>统计建模</b><div class="what">线性 / Logistic 回归 · 聚类 · 因子分析 · SEM 结构方程 · 信效度检验</div></div>
     <div class="skill"><b>AI 智能体应用</b><div class="what">熟练运用国内外 AI 辅助数据分析 · 大模型 API 接入 · 提示词编写</div></div>
   </div>
@@ -1314,6 +1326,108 @@ q1, q3 = 订单["单价"].quantile(0.25), 订单["单价"].quantile(0.75)
     <p><b>4. 价格策略：</b>折扣与订单金额弱负相关，说明「打折不一定带来更高客单」，应转向满减 / 组合套餐提升件单价。</p>
     <p style="margin-top:18px;color:var(--nc);font-size:13px;font-weight:700">↓ 完整项目（原始 Excel 数据 + 教学 Notebook + 全部代码 + 9 张结果图）</p>
     <p><a href="https://github.com/chenconghui-yyazj/chenconghui-yyazj.github.io/tree/main/projects/ecommerce-sales-analysis" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;background:var(--grad);color:#0a0216;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 0 30px rgba(255,79,216,.35)">在 GitHub 查看完整项目 →</a></p>
+  </div>
+</div>
+
+<div data-proj="pm">
+  <h1>产品经理实习生招聘数据分析：采集 · 清洗 · 统计建模 · 可视化全流程</h1>
+  <div class="dmeta">八爪鱼采集器 · Excel · SPSS · Tableau ｜ 自采岗位 1214 条 · 清洗后有效样本 979 条 · 城市 / 行业 / 企业类型 / 规模 / 学历 / 实习月数 六维分析 ｜ 仓库：product-manager-intern-data-analysis</div>
+
+  <!-- 01 背景与目标 -->
+  <div class="secbox">
+    <h2>01 项目背景与目标</h2>
+    <p class="dlead">数字互联网行业持续扩张，产品经理岗位作为互联网核心职能，实习生招聘成为企业储备人才、降低用工成本的重要途径；不同城市、企业规模、学历条件对应的实习薪资与岗位需求差异显著，招聘市场信息碎片化，企业招人、学生求职均存在信息不对称。本项目基于自采的真实招聘数据，完成一条从采集到结论的完整数据分析链路。</p>
+    <p>项目目标：挖掘岗位在<strong>城市、行业、企业类型、公司规模、学历、实习时长</strong>六大维度的分布规律；量化各类因素对实习日薪的影响、明确薪资核心驱动因子；从企业招聘端与学生求职端双向输出落地建议。整体流程为：八爪鱼采集 → Excel 清洗 → SPSS 统计建模 → Tableau 可视化 → 综合报告。</p>
+    <div class="fig"><img src="assets/pm-flow.png" alt="项目分析思路图"></div>
+  </div>
+
+  <!-- 02 数据来源与清洗 -->
+  <div class="secbox">
+    <h2>02 数据来源与 Excel 清洗</h2>
+    <p class="dlead">原始数据采集自主流招聘平台公开条目，筛选关键词「产品经理实习生」，剔除非实习、社招岗位，共采集 1214 条。Excel 阶段完成去重、缺失值、异常值处理与薪资标准化，最终保留 979 条可分析记录。</p>
+    <table>
+      <tr><th>字段</th><th>清洗规则</th></tr>
+      <tr><td>岗位名称</td><td>删除与「产品经理 / 产品实习生」不相关的岗位</td></tr>
+      <tr><td>薪资</td><td>仅保留「xxx/天」「xxx-xxx/天」格式，删除面议与格式错误数据</td></tr>
+      <tr><td>学历</td><td>仅保留本科、硕士、大专、学历不限</td></tr>
+      <tr><td>工作时间</td><td>仅保留「x天/周」格式</td></tr>
+      <tr><td>实习期</td><td>仅保留「实习x个月」格式</td></tr>
+      <tr><td>公司规模</td><td>统一为 15人以下 / 15-50 / 50-150 / 150-500 / 500-2000 / 2000人以上</td></tr>
+      <tr><td>城市 / 行业</td><td>删除「全国」「不限」等无效取值</td></tr>
+    </table>
+    <p>清洗与字段提取的核心 Excel 公式（随原始数据自动复算）：</p>
+    <div class="code"><pre>// ① 薪资逻辑校验：最高薪资 ≥ 最低薪资，否则标记异常行
+// H 列=最高薪资，G 列=最低薪资；VALUE() 把文本型数字转成数值后比较
+=IF(VALUE(H3)&gt;=VALUE(G3),"正常","异常（最高&lt;最低）")
+
+// ② 平均日薪：最低、最高薪资取算术平均
+=(G2+H2)/2
+
+// ③ 每周工作天数：格式「x天/周」，LEFT 提取首位数字
+=LEFT(L2,1)
+
+// ④ 实习月数：格式「实习x个月」，MID 从第 3 位起取 1 个字符
+=MID(N2,3,1)
+
+// ⑤ 技能词频：岗位要求列中模糊匹配技能词出现次数（* 为前后任意字符）
+=COUNTIF(R:R,"*"&amp;S2&amp;"*")</pre></div>
+  </div>
+
+  <!-- 03 SPSS 统计建模 -->
+  <div class="secbox">
+    <h2>03 SPSS 统计建模</h2>
+    <p class="dlead">原始平均日薪右偏严重，先对薪资取自然对数生成「对数平均薪资」改善分布，再做描述统计、箱线图与线性回归。定性变量（学历、企业类型、公司规模）先创建虚变量转为 0/1 定量编码，每类保留一种作为基准组。</p>
+    <p><strong>描述性统计</strong>：样本量充足，平均日薪处于中等区间，但标准差与方差较大，岗位薪资离散度高，受学历、规模、企业类型等多因素影响。</p>
+    <div class="fig"><img src="assets/pm-desc.png" alt="描述性统计结果"></div>
+    <p><strong>学历与规模箱线图</strong>：学历越高薪资中位数越高；规模越大薪资箱体位置越高，2000 人以上显著高于其他，中型企业竞争力较弱。</p>
+    <div class="fig"><img src="assets/pm-box-edu.png" alt="学历与对数平均薪资箱线图"></div>
+    <div class="fig"><img src="assets/pm-box-size.png" alt="公司规模与对数平均薪资箱线图"></div>
+    <p><strong>线性回归结果</strong>：在 0.05 显著性水平下，以下 5 个自变量对对数平均薪资存在显著影响：</p>
+    <table>
+      <tr><th>自变量</th><th>系数方向</th><th>显著性判定</th></tr>
+      <tr><td>学历 = 不限</td><td>负（薪资显著低于基准组）</td><td>P &lt; 0.05，显著</td></tr>
+      <tr><td>学历 = 大专</td><td>负（薪资显著低于基准组）</td><td>P &lt; 0.05，显著</td></tr>
+      <tr><td>企业类型 = 国有企业</td><td>负（薪资显著低于基准组）</td><td>P &lt; 0.05，显著</td></tr>
+      <tr><td>企业类型 = 民营企业</td><td>正（薪资显著更高）</td><td>P &lt; 0.05，显著</td></tr>
+      <tr><td>公司规模 = 2000 人以上</td><td>正（薪资显著更高）</td><td>P &lt; 0.05，显著</td></tr>
+    </table>
+    <div class="fig"><img src="assets/pm-reg.png" alt="线性回归分析结果"></div>
+  </div>
+
+  <!-- 04 Tableau 可视化 -->
+  <div class="secbox">
+    <h2>04 Tableau 可视化结果</h2>
+    <p class="dlead">基于清洗后数据绘制城市、行业、薪资、规模、学历、实习月数、技能词等多维图表，并组合为综合仪表板。核心结果指标如下：</p>
+    <table>
+      <tr><th>维度</th><th>关键结果</th></tr>
+      <tr><td>城市需求</td><td>北京 407、上海 295 领先，深圳、广州、杭州次之，二三线极少</td></tr>
+      <tr><td>行业需求</td><td>互联网 / 游戏 / 软件 691 个岗位，占绝对主导</td></tr>
+      <tr><td>城市日薪</td><td>深圳 229.0、北京 225.3、上海 213.9 居前三</td></tr>
+      <tr><td>规模薪资</td><td>2000 人以上 226.45，15 人以下 192.17，中型偏低、两极分化</td></tr>
+      <tr><td>企业类型</td><td>民营上限 251.1 最高；国企下限 132.4 最低、区间窄、稳定性强</td></tr>
+      <tr><td>学历薪资</td><td>硕士 224.10、本科 213.64、不限 179.60、大专 141.56</td></tr>
+      <tr><td>学历需求</td><td>本科 824、不限 77、硕士 50、大专 16</td></tr>
+      <tr><td>实习月数</td><td>8 个月 300.0、7 个月 275.0、4 个月 238.9，越长薪资越高</td></tr>
+    </table>
+    <div class="fig"><img src="assets/pm-city.png" alt="各城市岗位需求量柱状图"></div>
+    <div class="fig"><img src="assets/pm-industry.png" alt="各行业岗位需求量条形图"></div>
+    <div class="fig"><img src="assets/pm-sal-edu.png" alt="不同学历平均薪资对比图"></div>
+    <div class="fig"><img src="assets/pm-wordcloud.png" alt="岗位技能词云图"></div>
+    <div class="fig"><img src="assets/pm-dashboard.png" alt="招聘数据综合仪表板"></div>
+  </div>
+
+  <!-- 05 结论与建议 -->
+  <div class="secbox">
+    <h2>05 结论与建议</h2>
+    <ul>
+      <li><strong>地域</strong>：岗位资源地域分化明显，北上深杭一线及新一线聚集大部分需求与高薪岗位，三四线稀缺；</li>
+      <li><strong>行业</strong>：互联网软件行业是主要需求来源，金融、文创等仅有零星需求；</li>
+      <li><strong>学历</strong>：企业以本科为核心招聘标准，本科选择最多、薪资居中，硕士薪资最优但名额少，大专岗位少且薪资偏低；</li>
+      <li><strong>企业属性与规模</strong>：千人以上大型企业与民企实习薪资整体更高，国企偏低但稳定，中型企业竞争力薄弱；</li>
+      <li><strong>实习周期</strong>：企业普遍偏好 3–6 个月中短期连续实习，时长越长薪资越高；</li>
+      <li><strong>技能</strong>：数据分析、沟通协作、基础 AI 应用是硬性核心技能，SQL、竞品分析、PRD 为高频专业要求。</li>
+    </ul>
+    <p>完整原始数据、清洗结果、核心代码与全部结果图表见 GitHub 仓库：<a href="https://github.com/chenconghui-yyazj/product-manager-intern-data-analysis" target="_blank" rel="noopener" style="color:var(--nv);text-decoration:underline">product-manager-intern-data-analysis</a>。</p>
   </div>
 </div>
 
