@@ -261,6 +261,15 @@
   .lightbox .cap{position:fixed;bottom:26px;left:0;right:0;text-align:center;color:var(--muted);font-size:13px}
   .lightbox .lb-close{position:fixed;top:20px;right:24px;width:44px;height:44px;border-radius:12px;border:1px solid rgba(152,165,206,.3);background:rgba(3,5,20,.7);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:901;line-height:1}
   .lightbox .lb-close:hover{border-color:var(--nv);color:var(--nv)}
+  /* ===== 可视化结果图网格 ===== */
+  .shot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0}
+  .shot-card{background:#0a0e2a;border:1px solid rgba(152,165,206,.18);border-radius:14px;padding:10px;display:flex;flex-direction:column;transition:.3s}
+  .shot-card:hover{border-color:rgba(152,165,206,.4)}
+  .shot-card .shot-img{height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:10px;background:#070912}
+  .shot-card .shot-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+  .shot-card .cap{font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.4}
+  @media(max-width:860px){.shot-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.shot-grid{grid-template-columns:1fr}.shot-card .shot-img{height:220px}}
 </style>
 </head>
 <body>
@@ -359,13 +368,14 @@
   <div class="skills rv">
     <div class="skill skill-link" data-skill="python" role="button" tabindex="0" title="点击查看 Python 数据分析项目"><b>Python</b><div class="what">pandas 数据清洗合并 · numpy 计算 · jieba 分词 · matplotlib / seaborn 绘图 · 全流程可复现</div><div class="skill-tip">点击查看 <span>→</span></div></div>
     <div class="skill skill-link" data-skill="sql" role="button" tabindex="0" title="点击查看 SQL 电商数据分析项目"><b>SQL</b><div class="what">增删改查 · 多表关联 · 窗口函数 · 聚合分组统计</div><div class="skill-tip">点击查看 <span>→</span></div></div>
-    <div class="skill"><b>数据可视化</b><div class="what">matplotlib / seaborn / ECharts · 中英双语图表 · 规范配色与信息层级</div></div>
+    <div class="skill skill-link" data-skill="dataviz" role="button" tabindex="0" title="点击查看 Excel 可视化项目"><b>数据可视化</b><div class="what">matplotlib / seaborn / ECharts · Excel 透视表与切片器联动仪表盘 · 中英双语图表 · 规范配色与信息层级</div><div class="skill-tip">点击查看 <span>→</span></div></div>
     <div class="skill-group">
       <div class="skill-group-title">综合项目 · 产品经理实习生招聘数据分析（点击下方卡片查看）</div>
       <div class="skill skill-link" data-skill="pm" role="button" tabindex="0" title="点击查看综合项目"><b>Excel</b><div class="what">数据清洗 · 去重 / 缺失值 / 异常值 · 薪资标准化 · 函数与文本字段提取</div><div class="skill-tip">点击查看 <span>→</span></div></div>
       <div class="skill skill-link" data-skill="pm" role="button" tabindex="0" title="点击查看综合项目"><b>PowerBI</b><div class="what">数据建模 · DAX 度量 · 交互式看板 · Tableau 多维仪表板</div><div class="skill-tip">点击查看 <span>→</span></div></div>
       <div class="skill skill-link" data-skill="pm" role="button" tabindex="0" title="点击查看综合项目"><b>SPSS</b><div class="what">描述统计 · 箱线图 · 虚变量编码 · 线性回归建模</div><div class="skill-tip">点击查看 <span>→</span></div></div>
     </div>
+    <div class="skill"><b>蓝鲸数据挖掘</b><div class="what">数据预处理 · 分类 / 聚类 / 关联规则建模 · 模型评估与结果解读</div></div>
     <div class="skill"><b>统计建模</b><div class="what">线性 / Logistic 回归 · 聚类 · 因子分析 · SEM 结构方程 · 信效度检验</div></div>
     <div class="skill"><b>AI 智能体应用</b><div class="what">熟练运用国内外 AI 辅助数据分析 · 大模型 API 接入 · 提示词编写</div></div>
   </div>
@@ -1614,6 +1624,58 @@ WHERE o.order_status='已完成';</pre></div>
     <div class="kbox">
       <p>项目含 6 张原始数据集（CSV + Excel 汇总工作簿）、建表脚本、5 大模块完整 SQL、项目报告与运行结果汇总表，已托管至 GitHub，可查看完整代码与数据。</p>
       <p><a href="https://github.com/chenconghui-yyazj/sql-ecommerce-analysis" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;background:var(--grad);color:#0a0216;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 0 30px rgba(255,79,216,.35)">GitHub 仓库：sql-ecommerce-analysis →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Excel 数据可视化作品 -->
+<div data-proj="dataviz">
+  <h1>Excel 数据可视化作品：月度趋势 · 结构占比 · 对比回归 图表集</h1>
+  <div class="dmeta">Excel · 数据透视表 · 组合图 / 堆叠图 / 饼图环形图 / 散点回归 / 矩形树图 ｜ 19 张业务可视化图表，覆盖趋势跟踪、结构占比、对比分布三类主题</div>
+
+  <div class="secbox">
+    <h2>01 作品概述</h2>
+    <p class="dlead">本部分为 Excel 高级应用中的可视化成果：基于整理后的业务数据，围绕经营指标的变化趋势、构成占比与横向对比，选择折线/面积图、堆叠柱与堆叠面积图、饼图与双层环形图、散点回归、矩形树图等图表类型，把表格数据转化为可直观看出规律的图形。</p>
+    <p>图表按分析目的分为三组：<strong>月度趋势与跟踪</strong>看指标随时间的走向与波动；<strong>结构占比分析</strong>看各分类在整体中的份额；<strong>对比 · 分布与回归</strong>看预算与实际、不同地区/年度的差异，以及两个变量之间的相关关系。</p>
+  </div>
+
+  <div class="secbox">
+    <h2>02 月度趋势与跟踪</h2>
+    <p class="dlead">以月份为横轴，用折线、面积、组合图呈现合格率、价格、销售额、余额、现金流与产品结构的月度走势，并叠加参考线或累计趋势线辅助判断。</p>
+    <div class="shot-grid">
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-01.png" alt="各月合格率跟踪"></div><div class="cap">图 01 · 各月合格率跟踪：折线叠加标准合格率 98.50% 参考线，1—12 月合格率在 96.49%—99.87% 间波动</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-02.png" alt="各月销售价格波动"></div><div class="cap">图 02 · 各月销售价格波动：折线叠加最高 21.72、最低 8.21 价格区间参考线，呈现月度售价起伏</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-03.png" alt="2021年销售分析"></div><div class="cap">图 03 · 2021 年销售分析：销售额柱形 + 毛利折线组合图，逐月对照销售规模与盈利水平</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-04.png" alt="账户余额跟踪"></div><div class="cap">图 04 · 账户余额跟踪：面积折线图，标注最新余额 569，反映账户余额月度走势</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-11.png" alt="各月现金流入与流出"></div><div class="cap">图 11 · 各月现金流入与流出：堆叠柱叠加累计净现金余额折线，跟踪收支结构与现金净额变化</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-12.png" alt="每月各产品销售占比"></div><div class="cap">图 12 · 每月各产品销售占比：100% 堆叠面积图，展示产品 A—E 逐月结构变化</div></div>
+    </div>
+  </div>
+
+  <div class="secbox">
+    <h2>03 结构占比分析</h2>
+    <p class="dlead">用堆叠条形、饼图、环形图与双层环形图呈现地区产品构成、品类销售份额、成本结构以及销售额与毛利的内外层对照。</p>
+    <div class="shot-grid">
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-07.png" alt="各地区产品销售结构"></div><div class="cap">图 07 · 各地区产品销售结构：100% 堆叠条形图，对比华中/西南/华南/华东/华北五地的产品 A—E 构成</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-08.png" alt="各类别商品销售占比环形图"></div><div class="cap">图 08 · 各类别商品销售占比：环形图，服饰 41%、生鲜 31%、家电 20%、百货 5%、文化 3%，销售总额 27300</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-09.png" alt="环形图中心嵌品类柱图"></div><div class="cap">图 09 · 品类占比另一版本：环形中心嵌入品类小柱图，份额与量级一并呈现</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-10.png" alt="销售额饼图"></div><div class="cap">图 10 · 销售额饼图：服饰 40.50%、生鲜 31.40%、家电 20.03%、百货 4.74%、文化 3.32%</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-14.png" alt="产品成本结构分析"></div><div class="cap">图 14 · 产品成本结构分析：饼图配局部放大，材料费 46.7%、其他 40.9%、直接人工 12.4%，拆出加工费、折旧、电费、维修等明细</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-18.png" alt="各类商品销售和毛利占比"></div><div class="cap">图 18 · 各类商品销售和毛利占比：双层环形图，外圈销售额、内圈毛利，对照品类盈利贡献</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-19.png" alt="地区销售及产品销售结构"></div><div class="cap">图 19 · 地区销售及产品销售结构：双层环形图，外圈地区（华中 33%、华北 26%、华南 20%、华东 14%、西南 7%），内圈产品（C 34%、A 27%、B 21%、D 18%）</div></div>
+    </div>
+  </div>
+
+  <div class="secbox">
+    <h2>04 对比 · 分布与回归</h2>
+    <p class="dlead">通过散点回归、预算与实际对照、矩形树图、年度对比堆叠柱与季度应收应付堆叠柱，呈现变量相关关系、计划执行差异与不同口径下的规模对比。</p>
+    <div class="shot-grid">
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-05.png" alt="机器工时与维修费回归散点"></div><div class="cap">图 05 · 机器工时—维修费回归散点：散点加线性趋势线，y=0.1123x+52.926，R²=0.7819，反映工时与维修费正相关</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-06.png" alt="预算执行差异分析"></div><div class="cap">图 06 · 预算执行差异分析：预算虚线与实际折线对照，逐月标注差异（-538 / 521 / -256 / 460 / -850 / -39 / 1152）</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-13.png" alt="地区与省份销售矩形树图"></div><div class="cap">图 13 · 各地区与省份销售占比：矩形树图，按地区—省份层级呈现销售规模，华东 7752 居首</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-15.png" alt="全球销售市场占比两年对比"></div><div class="cap">图 15 · 全球销售市场占比两年对比：100% 堆叠条形图，2021 与 2022 国内/东南亚/美洲/欧洲结构，总额 722.73 → 907.44</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-16.png" alt="全球销售两年对比堆叠柱"></div><div class="cap">图 16 · 全球销售两年对比：堆叠柱，2021 年 722.7、2022 年 907.4，分国内/东南/美/欧四个区域</div></div>
+      <div class="shot-card"><div class="shot-img"><img src="assets/viz-excel-17.png" alt="应收应付项目结构占比"></div><div class="cap">图 17 · 应收应付项目结构占比：季度堆叠柱叠加应收合计、应付合计折线，对照季度往来款规模</div></div>
     </div>
   </div>
 </div>
